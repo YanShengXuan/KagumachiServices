@@ -9,8 +9,8 @@ public class Message {
     private Long id;
     private String content;
     private Long timestamp;
-
-    // Getters and setters
+    private Long senderid;
+    private Long receiverid;
 
     public Long getId() {
         return id;
@@ -34,5 +34,32 @@ public class Message {
 
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Long getSenderid() {
+        return senderid;
+    }
+
+    public void setSenderid(Long senderid) {
+        this.senderid = senderid;
+    }
+
+    public Long getReceiverid() {
+        return receiverid;
+    }
+
+    public void setReceiverid(Long receiverid) {
+        this.receiverid = receiverid;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", timestamp=" + timestamp +
+                ", senderid=" + senderid +
+                ", receiverid=" + receiverid +
+                '}';
     }
 }
