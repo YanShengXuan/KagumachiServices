@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "messageid")
     private Long id;
     private String content;
     private Long timestamp;
