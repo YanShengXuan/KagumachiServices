@@ -9,7 +9,7 @@ public class Finance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer financeId;
+    private Integer financeid;
 
     private LocalDate date;
 
@@ -19,12 +19,12 @@ public class Finance {
 
     private Integer money;
 
-    public Integer getFinanceId() {
-        return financeId;
+    public Integer getFinanceid() {
+        return financeid;
     }
 
-    public void setFinanceId(Integer financeId) {
-        this.financeId = financeId;
+    public void setFinanceid(Integer financeid) {
+        this.financeid = financeid;
     }
 
     public LocalDate getDate() {

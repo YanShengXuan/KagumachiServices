@@ -8,7 +8,7 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer cartsId;
+    private Integer cartsid;
 
     @ManyToOne
     @JoinColumn(name = "memberId")
@@ -24,14 +24,14 @@ public class Cart {
 
     private Integer quantity;
 
-    private Boolean isPurchase;
+    private Boolean ispurchase;
 
-    public Integer getCartsId() {
-        return cartsId;
+    public Integer getCartsid() {
+        return cartsid;
     }
 
-    public void setCartsId(Integer cartsId) {
-        this.cartsId = cartsId;
+    public void setCartsid(Integer cartsid) {
+        this.cartsid = cartsid;
     }
 
     public Member getMember() {
@@ -66,11 +66,11 @@ public class Cart {
         this.quantity = quantity;
     }
 
-    public Boolean getIsPurchase() {
-        return isPurchase;
+    public Boolean getIspurchase() {
+        return ispurchase;
     }
 
-    public void setIsPurchase(Boolean isPurchase) {
-        this.isPurchase = isPurchase;
+    public void setIspurchase(Boolean ispurchase) {
+        this.ispurchase = ispurchase;
     }
 }

@@ -8,17 +8,17 @@ public class Logistics {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer logisticsId;
+    private Integer logisticsid;
 
     private String comname;
 
 
-    public Integer getLogisticsId() {
-        return logisticsId;
+    public Integer getLogisticsid() {
+        return logisticsid;
     }
 
-    public void setLogisticsId(Integer logisticsId) {
-        this.logisticsId = logisticsId;
+    public void setLogisticsid(Integer logisticsid) {
+        this.logisticsid = logisticsid;
     }
 
     public String getComname() {
