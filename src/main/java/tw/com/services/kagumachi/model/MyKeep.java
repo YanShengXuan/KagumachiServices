@@ -3,7 +3,7 @@ package tw.com.services.kagumachi.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "MyKeep")
+@Table(name = "Mykeep")
 public class MyKeep {
 
     @Id
@@ -11,11 +11,11 @@ public class MyKeep {
     private Integer mykeepid;
 
     @ManyToOne
-    @JoinColumn(name = "memberId", nullable = false)
+    @JoinColumn(name = "memberid", nullable = false)
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "productId", nullable = false)
+    @JoinColumn(name = "productid", nullable = false)
     private Product product;
 
     public Integer getMykeepid() {

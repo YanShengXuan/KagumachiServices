@@ -8,7 +8,8 @@ public class Sales {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer salesId;
+    @Column(name = "salesid")
+    private Integer salesid;
 
     private String name;
 
@@ -16,12 +17,12 @@ public class Sales {
 
     private Double discount;
 
-    public Integer getSalesId() {
-        return salesId;
+    public Integer getSalesid() {
+        return salesid;
     }
 
-    public void setSalesId(Integer salesId) {
-        this.salesId = salesId;
+    public void setSalesid(Integer salesid) {
+        this.salesid = salesid;
     }
 
     public String getName() {

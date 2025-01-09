@@ -16,11 +16,11 @@ public class Product {
     private String productdescription;
 
     @ManyToOne
-    @JoinColumn(name = "mainCategoryId")
+    @JoinColumn(name = "maincategoryid")
     private MainCategory mainCategory;
 
     @ManyToOne
-    @JoinColumn(name = "subCategoryId")
+    @JoinColumn(name = "subcategoryid")
     private SubCategory subCategory;
 
     private String supplierid;

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ProductColorRepository extends JpaRepository<ProductColor, Integer> {
-
+    List<ProductColor> findByProduct_Productid(Integer productid);
 }
