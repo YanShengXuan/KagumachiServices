@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface MyKeepRepository extends JpaRepository<MyKeep, Integer> {
     List<MyKeep> findByMember_Memberid(Integer memberid);
+    void deleteByMember_MemberidAndProduct_Productid(Integer memberid, Integer productid);
 }
