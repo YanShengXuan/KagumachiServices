@@ -4,15 +4,15 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "ProductColors")
+@Table(name = "Productcolors")
 public class ProductColor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer colorsId;
+    private Integer colorsid;
 
     @ManyToOne
-    @JoinColumn(name = "productId")
+    @JoinColumn(name = "productid")
     private Product product;
 
 
@@ -21,12 +21,12 @@ public class ProductColor {
     private Integer minstock;
     private LocalDate updateat;
 
-    public Integer getColorsId() {
-        return colorsId;
+    public Integer getColorsid() {
+        return colorsid;
     }
 
-    public void setColorsId(Integer colorsId) {
-        this.colorsId = colorsId;
+    public void setColorsid(Integer colorsid) {
+        this.colorsid = colorsid;
     }
 
     public Product getProduct() {

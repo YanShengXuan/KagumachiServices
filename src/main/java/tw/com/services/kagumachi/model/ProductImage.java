@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "ProductImages")
+@Table(name = "Productimages")
 public class ProductImage {
 
     @Id
@@ -13,11 +13,11 @@ public class ProductImage {
     private Integer imageid;
 
     @ManyToOne
-    @JoinColumn(name = "productId")
+    @JoinColumn(name = "productid")
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "productColorsId")
+    @JoinColumn(name = "productcolorsid")
     private ProductColor productColor;
 
     private String imageurl;
