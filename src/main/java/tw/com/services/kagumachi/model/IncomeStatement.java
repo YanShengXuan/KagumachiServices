@@ -1,7 +1,12 @@
 package tw.com.services.kagumachi.model;
 
-import jakarta.persistence.*;
-import java.time.LocalDate;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "IncomeStatement")
@@ -15,9 +20,26 @@ public class IncomeStatement {
     @JoinColumn(name = "productId")
     private Product product;
 
-    private LocalDate month;
+    private Integer month;
+    private Integer year;
 
-    private Integer productcost;
+    public Integer getMonth() {
+		return month;
+	}
+
+	public void setMonth(Integer month) {
+		this.month = month;
+	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	private Integer productcost;
     private Integer operatingrevenue;
     private Integer operatingexpenses;
     private Integer grossprofit;
@@ -43,13 +65,6 @@ public class IncomeStatement {
         this.product = product;
     }
 
-    public LocalDate getMonth() {
-        return month;
-    }
-
-    public void setMonth(LocalDate month) {
-        this.month = month;
-    }
 
     public Integer getProductcost() {
         return productcost;
