@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "Productimages")
 public class ProductImage {
@@ -11,14 +14,6 @@ public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer imageid;
-
-    @ManyToOne
-    @JoinColumn(name = "productid")
-    private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "productcolorsid")
-    private ProductColor productColor;
 
     private String imageurl;
     private Boolean isprimary;
@@ -32,21 +27,6 @@ public class ProductImage {
         this.imageid = imageid;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public ProductColor getProductColor() {
-        return productColor;
-    }
-
-    public void setProductColor(ProductColor productColor) {
-        this.productColor = productColor;
-    }
 
     public String getImageurl() {
         return imageurl;
@@ -70,5 +50,29 @@ public class ProductImage {
 
     public void setUpdatedat(Date updatedat) {
         this.updatedat = updatedat;
+    }
+    
+    @ManyToOne
+    @JoinColumn(name = "productid")
+    @JsonBackReference
+    private Product product;
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    
+    @ManyToOne
+    @JoinColumn(name = "colorsid")
+    @JsonManagedReference
+    private ProductColor productColor;
+    public ProductColor getProductColor() {
+        return productColor;
+    }
+
+    public void setProductColor(ProductColor productColor) {
+        this.productColor = productColor;
     }
 }

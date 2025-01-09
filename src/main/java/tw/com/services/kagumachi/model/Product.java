@@ -3,6 +3,10 @@ package tw.com.services.kagumachi.model;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "Products")
@@ -11,16 +15,17 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer productid;
-
     private String productname;
     private String productdescription;
 
     @ManyToOne
     @JoinColumn(name = "maincategoryid")
+    @JsonManagedReference
     private MainCategory mainCategory;
 
     @ManyToOne
     @JoinColumn(name = "subcategoryid")
+    @JsonManagedReference
     private SubCategory subCategory;
 
     private String supplierid;
@@ -35,7 +40,6 @@ public class Product {
     private Double rating;
     private Integer reviewcount;
     private Date updateat;
-
 
     public Integer getProductid() {
         return productid;
@@ -172,4 +176,24 @@ public class Product {
     public void setUpdateat(Date updateat) {
         this.updateat = updateat;
     }
+    
+    @OneToMany(mappedBy = "product")
+	@JsonBackReference
+	private List<Cart> cart;
+    public List<Cart> getCart() {
+		return cart;
+	}
+	public void setCart(List<Cart> cart) {
+		this.cart = cart;
+	}
+	
+	@OneToMany(mappedBy = "product")
+	@JsonManagedReference
+	private List<ProductImage> productimage;
+	public List<ProductImage> getProductimage() {
+		return productimage;
+	}
+	public void setProductimage(List<ProductImage> productimage) {
+		this.productimage = productimage;
+	}
 }
