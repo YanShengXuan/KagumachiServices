@@ -8,7 +8,7 @@ public class MyKeep {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer myKeepId;
+    private Integer mykeepid;
 
     @ManyToOne
     @JoinColumn(name = "memberId", nullable = false)
@@ -18,12 +18,12 @@ public class MyKeep {
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
-    public Integer getMyKeepId() {
-        return myKeepId;
+    public Integer getMykeepid() {
+        return mykeepid;
     }
 
-    public void setMyKeepId(Integer myKeepId) {
-        this.myKeepId = myKeepId;
+    public void setMykeepid(Integer mykeepid) {
+        this.mykeepid = mykeepid;
     }
 
     public Member getMember() {

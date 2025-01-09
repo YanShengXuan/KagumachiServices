@@ -9,7 +9,7 @@ public class IncomeStatement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer incomeStatementId;
+    private Integer incomestatementid;
 
     @ManyToOne
     @JoinColumn(name = "productId")
@@ -17,22 +17,22 @@ public class IncomeStatement {
 
     private LocalDate month;
 
-    private Integer productCost;
-    private Integer operatingRevenue;
-    private Integer operatingExpenses;
-    private Integer grossProfit;
-    private Integer nonOperatingIncomeAndExpenses;
-    private Integer incomeTax;
-    private Integer netProfitAfterTax;
-    private Integer capitalStock;
-    private Integer earningsPerShare;
+    private Integer productcost;
+    private Integer operatingrevenue;
+    private Integer operatingexpenses;
+    private Integer grossprofit;
+    private Integer nonoperatingincomeandexpenses;
+    private Integer incometax;
+    private Integer netprofitaftertax;
+    private Integer capitalstock;
+    private Integer earningspershare;
 
-    public Integer getIncomeStatementId() {
-        return incomeStatementId;
+    public Integer getIncomestatementid() {
+        return incomestatementid;
     }
 
-    public void setIncomeStatementId(Integer incomeStatementId) {
-        this.incomeStatementId = incomeStatementId;
+    public void setIncomestatementid(Integer incomestatementid) {
+        this.incomestatementid = incomestatementid;
     }
 
     public Product getProduct() {
@@ -51,75 +51,75 @@ public class IncomeStatement {
         this.month = month;
     }
 
-    public Integer getProductCost() {
-        return productCost;
+    public Integer getProductcost() {
+        return productcost;
     }
 
-    public void setProductCost(Integer productCost) {
-        this.productCost = productCost;
+    public void setProductcost(Integer productcost) {
+        this.productcost = productcost;
     }
 
-    public Integer getOperatingRevenue() {
-        return operatingRevenue;
+    public Integer getOperatingrevenue() {
+        return operatingrevenue;
     }
 
-    public void setOperatingRevenue(Integer operatingRevenue) {
-        this.operatingRevenue = operatingRevenue;
+    public void setOperatingrevenue(Integer operatingrevenue) {
+        this.operatingrevenue = operatingrevenue;
     }
 
-    public Integer getOperatingExpenses() {
-        return operatingExpenses;
+    public Integer getOperatingexpenses() {
+        return operatingexpenses;
     }
 
-    public void setOperatingExpenses(Integer operatingExpenses) {
-        this.operatingExpenses = operatingExpenses;
+    public void setOperatingexpenses(Integer operatingexpenses) {
+        this.operatingexpenses = operatingexpenses;
     }
 
-    public Integer getGrossProfit() {
-        return grossProfit;
+    public Integer getGrossprofit() {
+        return grossprofit;
     }
 
-    public void setGrossProfit(Integer grossProfit) {
-        this.grossProfit = grossProfit;
+    public void setGrossprofit(Integer grossprofit) {
+        this.grossprofit = grossprofit;
     }
 
-    public Integer getNonOperatingIncomeAndExpenses() {
-        return nonOperatingIncomeAndExpenses;
+    public Integer getNonoperatingincomeandexpenses() {
+        return nonoperatingincomeandexpenses;
     }
 
-    public void setNonOperatingIncomeAndExpenses(Integer nonOperatingIncomeAndExpenses) {
-        this.nonOperatingIncomeAndExpenses = nonOperatingIncomeAndExpenses;
+    public void setNonoperatingincomeandexpenses(Integer nonoperatingincomeandexpenses) {
+        this.nonoperatingincomeandexpenses = nonoperatingincomeandexpenses;
     }
 
-    public Integer getIncomeTax() {
-        return incomeTax;
+    public Integer getIncometax() {
+        return incometax;
     }
 
-    public void setIncomeTax(Integer incomeTax) {
-        this.incomeTax = incomeTax;
+    public void setIncometax(Integer incometax) {
+        this.incometax = incometax;
     }
 
-    public Integer getNetProfitAfterTax() {
-        return netProfitAfterTax;
+    public Integer getNetprofitaftertax() {
+        return netprofitaftertax;
     }
 
-    public void setNetProfitAfterTax(Integer netProfitAfterTax) {
-        this.netProfitAfterTax = netProfitAfterTax;
+    public void setNetprofitaftertax(Integer netprofitaftertax) {
+        this.netprofitaftertax = netprofitaftertax;
     }
 
-    public Integer getCapitalStock() {
-        return capitalStock;
+    public Integer getCapitalstock() {
+        return capitalstock;
     }
 
-    public void setCapitalStock(Integer capitalStock) {
-        this.capitalStock = capitalStock;
+    public void setCapitalstock(Integer capitalstock) {
+        this.capitalstock = capitalstock;
     }
 
-    public Integer getEarningsPerShare() {
-        return earningsPerShare;
+    public Integer getEarningspershare() {
+        return earningspershare;
     }
 
-    public void setEarningsPerShare(Integer earningsPerShare) {
-        this.earningsPerShare = earningsPerShare;
+    public void setEarningspershare(Integer earningspershare) {
+        this.earningspershare = earningspershare;
     }
 }

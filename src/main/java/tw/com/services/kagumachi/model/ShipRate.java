@@ -8,19 +8,19 @@ public class ShipRate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer shipRateId;
+    private Integer shiprateid;
 
     private String region;
 
     private Integer rate;
 
 
-    public Integer getShipRateId() {
-        return shipRateId;
+    public Integer getShiprateid() {
+        return shiprateid;
     }
 
-    public void setShipRateId(Integer shipRateId) {
-        this.shipRateId = shipRateId;
+    public void setShiprateid(Integer shiprateid) {
+        this.shiprateid = shiprateid;
     }
 
     public String getRegion() {
