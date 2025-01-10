@@ -11,15 +11,15 @@ public class Cart {
     private Integer cartsid;
 
     @ManyToOne
-    @JoinColumn(name = "memberId")
+    @JoinColumn(name = "memberid")
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "productId")
+    @JoinColumn(name = "productid")
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "colorId")
+    @JoinColumn(name = "colorid")
     private ProductColor color;
 
     private Integer quantity;

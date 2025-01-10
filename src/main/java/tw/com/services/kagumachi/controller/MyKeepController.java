@@ -6,12 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import tw.com.services.kagumachi.model.MyKeep;
-import tw.com.services.kagumachi.model.ProductColor;
-import tw.com.services.kagumachi.model.ProductImage;
-import tw.com.services.kagumachi.repository.MyKeepRepository;
-import tw.com.services.kagumachi.repository.ProductColorRepository;
-import tw.com.services.kagumachi.repository.ProductImageRepository;
+import tw.com.services.kagumachi.model.*;
+import tw.com.services.kagumachi.repository.*;
 
 import java.util.*;
 
@@ -26,6 +22,15 @@ public class MyKeepController {
 
     @Autowired
     private ProductColorRepository productColorRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @GetMapping
     public String getAllMyKeeps(@RequestParam Integer memberid) {
@@ -74,5 +79,41 @@ public class MyKeepController {
         Integer productid = payload.get("productid");
         myKeepRepository.deleteByMember_MemberidAndProduct_Productid(memberid, productid);
         return ResponseEntity.ok(Map.of("message", "Deleted successfully"));
+    }
+
+    @PostMapping
+    public ResponseEntity<Map<String, String>> addToCart(@RequestBody Map<String, Object> payload) {
+        Integer memberid = (Integer) payload.get("memberid");
+        Integer productid = (Integer) payload.get("productid");
+        String colorname = ((String) payload.get("color")).replace("'", "\"");
+        Integer quantity = (Integer) payload.get("quantity");
+
+        Member member = memberRepository.findById(memberid)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
+        Product product = productRepository.findById(productid)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        ProductColor productColor = productColorRepository.findByProduct_ProductidAndColorname(productid, colorname)
+                .orElseThrow(() -> new RuntimeException("ProductColor not found"));
+
+        Optional<Cart> existingCart = cartRepository.findByMember_MemberidAndProduct_ProductidAndColor_Colorsid(
+                memberid, productid, productColor.getColorsid());
+
+        if (existingCart.isPresent()) {
+            Cart cart = existingCart.get();
+            cart.setQuantity(cart.getQuantity() + quantity);
+            cartRepository.save(cart);
+        } else {
+            Cart cart = new Cart();
+            cart.setMember(member);
+            cart.setProduct(product);
+            cart.setColor(productColor);
+            cart.setQuantity(quantity);
+            cart.setIspurchase(true);
+            cartRepository.save(cart);
+        }
+
+        return ResponseEntity.ok(Map.of("message", "Added successfully"));
     }
 }
