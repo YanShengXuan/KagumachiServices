@@ -62,7 +62,7 @@ public class MyKeepController {
                 productdetail.put("color", productcolor.getColorname());
                 productdetail.put("qty", productcolor.getStock());
                 int colorsid = productcolor.getColorsid();
-                Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_colorsid(productid, colorsid);
+                Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
                 productdetail.put("imgsrc", productImage.isPresent() ? productImage.get().getImageurl() : "");
                 productdetails.put(productdetail);
             }
@@ -97,7 +97,7 @@ public class MyKeepController {
         ProductColor productColor = productColorRepository.findByProduct_ProductidAndColorname(productid, colorname)
                 .orElseThrow(() -> new RuntimeException("ProductColor not found"));
 
-        Optional<Cart> existingCart = cartRepository.findByMember_MemberidAndProduct_ProductidAndColor_Colorsid(
+        Optional<Cart> existingCart = cartRepository.findByMember_MemberidAndProduct_ProductidAndProductColor_Colorsid(
                 memberid, productid, productColor.getColorsid());
 
         if (existingCart.isPresent()) {
@@ -108,7 +108,7 @@ public class MyKeepController {
             Cart cart = new Cart();
             cart.setMember(member);
             cart.setProduct(product);
-            cart.setColor(productColor);
+            cart.setProductColor(productColor);
             cart.setQuantity(quantity);
             cart.setIspurchase(true);
             cartRepository.save(cart);

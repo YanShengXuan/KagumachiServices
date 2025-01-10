@@ -4,6 +4,9 @@ package tw.com.services.kagumachi.model;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "Members")
@@ -21,7 +24,7 @@ public class Member {
     private String city;
     private String address;
     private Date registrationdate;
-
+    
     public Integer getMemberid() {
         return memberid;
     }
@@ -29,7 +32,6 @@ public class Member {
     public void setMemberid(Integer memberid) {
         this.memberid = memberid;
     }
-
     public String getRealname() {
         return realname;
     }
@@ -93,5 +95,15 @@ public class Member {
     public void setRegistrationdate(Date registrationdate) {
         this.registrationdate = registrationdate;
     }
+    
+//    @OneToMany(mappedBy = "member")
+//    @JsonBackReference
+//	private List<Cart> cart;
+//    public List<Cart> getCarts() {
+//		return cart;
+//	}
+//	public void setCarts(List<Cart> cart) {
+//		this.cart = cart;
+//	}
 }
 
