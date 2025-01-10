@@ -10,7 +10,7 @@ CREATE TABLE `members` (
   `registrationdate` date
 );
 
-CREATE TABLE `mainCategories` (
+CREATE TABLE `maincategories` (
   `maincategoriesid` int(10) PRIMARY KEY AUTO_INCREMENT,
   `salesid` int(10),
   `categoryname` varchar(100) NOT NULL,
@@ -176,9 +176,15 @@ CREATE TABLE `productcolors` (
   `updateat` date
 );
 
-ALTER TABLE `mainCategories` ADD FOREIGN KEY (`salesid`) REFERENCES `sales` (`salesid`);
+ALTER TABLE `maincategories` ADD FOREIGN KEY (`salesid`) REFERENCES `sales` (`salesid`);
 
-ALTER TABLE `subcategories` ADD FOREIGN KEY (`maincategoriesid`) REFERENCES `mainCategories` (`maincategoriesid`);
+ALTER TABLE `subcategories` ADD FOREIGN KEY (`maincategoriesid`) REFERENCES `maincategories` (`maincategoriesid`);
+
+ALTER TABLE `products` ADD FOREIGN KEY (`maincategoryid`) REFERENCES `maincategories` (`maincategoriesid`);
+
+ALTER TABLE `products` ADD FOREIGN KEY (`subcategoryid`) REFERENCES `subcategories` (`subcategoryid`);
+
+ALTER TABLE `products` ADD FOREIGN KEY (`supplierid`) REFERENCES `suppliers` (`supplierid`);
 
 ALTER TABLE `carts` ADD FOREIGN KEY (`memberid`) REFERENCES `members` (`memberid`);
 
@@ -187,6 +193,8 @@ ALTER TABLE `carts` ADD FOREIGN KEY (`productid`) REFERENCES `products` (`produc
 ALTER TABLE `carts` ADD FOREIGN KEY (`colorsid`) REFERENCES `productcolors` (`colorsid`);
 
 ALTER TABLE `orders` ADD FOREIGN KEY (`memberid`) REFERENCES `members` (`memberid`);
+
+ALTER TABLE `orders` ADD FOREIGN KEY (`logisticsid`) REFERENCES `logistics` (`logisticsid`);
 
 ALTER TABLE `orderdetails` ADD FOREIGN KEY (`orderid`) REFERENCES `orders` (`orderid`);
 
@@ -205,5 +213,7 @@ ALTER TABLE `mykeep` ADD FOREIGN KEY (`memberid`) REFERENCES `members` (`memberi
 ALTER TABLE `mykeep` ADD FOREIGN KEY (`productid`) REFERENCES `products` (`productid`);
 
 ALTER TABLE `incomestatement` ADD FOREIGN KEY (`productid`) REFERENCES `products` (`productid`);
+
+ALTER TABLE `suppliers` ADD FOREIGN KEY (`subcategoriesid`) REFERENCES `subcategories` (`subcategoryid`);
 
 ALTER TABLE `productcolors` ADD FOREIGN KEY (`productid`) REFERENCES `products` (`productid`);
