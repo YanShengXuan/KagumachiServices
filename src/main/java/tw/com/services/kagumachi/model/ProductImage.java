@@ -3,10 +3,6 @@ package tw.com.services.kagumachi.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "productimages")
