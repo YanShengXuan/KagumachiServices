@@ -1,5 +1,6 @@
 package tw.com.services.kagumachi.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -7,12 +8,16 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "Productcolors")
+@Table(name = "productcolors")
 public class ProductColor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer colorsid;
+
+    @ManyToOne
+    @JoinColumn(name = "productid")
+    private Product product;
 
     private String colorname;
     private Integer stock;
@@ -59,10 +64,7 @@ public class ProductColor {
         this.updateat = updateat;
     }
     
-    @ManyToOne
-    @JoinColumn(name = "productid")
-    @JsonBackReference
-    private Product product;
+
     public Product getProduct() {
         return product;
     }
@@ -81,13 +83,5 @@ public class ProductColor {
 //		this.cart = cart;
 //	}
 	
-	@OneToMany(mappedBy = "productColor")
-	@JsonBackReference
-	private List<ProductImage> productImage;
-	public List<ProductImage> getProductImage() {
-		return productImage;
-	}
-	public void setProductImage(List<ProductImage> productImage) {
-		this.productImage = productImage;
-	}
+
 }

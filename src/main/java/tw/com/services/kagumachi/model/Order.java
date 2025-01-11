@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "Orders")
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -13,7 +13,7 @@ public class Order {
     private Integer orderid;
 
     @ManyToOne
-    @JoinColumn(name = "memberId")
+    @JoinColumn(name = "memberid")
     private Member member;
 
     private String orderstatus;
@@ -25,7 +25,7 @@ public class Order {
     private Double totalprice;
 
     @ManyToOne
-    @JoinColumn(name = "logisticsId")
+    @JoinColumn(name = "logisticsid")
     private Logistics logistics;
 
     private String logisticsnumber;

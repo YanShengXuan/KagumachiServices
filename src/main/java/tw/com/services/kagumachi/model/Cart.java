@@ -5,12 +5,24 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Carts")
+@Table(name = "carts")
 public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cartsid;
+
+    @ManyToOne
+    @JoinColumn(name = "memberid")
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "productid")
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "colorsid")
+    private ProductColor productColor;
 
     private Integer quantity;
 
@@ -40,10 +52,7 @@ public class Cart {
         this.ispurchase = ispurchase;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "memberid")
-    @JsonManagedReference
-    private Member member;
+
     public Member getMember() {
         return member;
     }
@@ -51,10 +60,7 @@ public class Cart {
         this.member = member;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "productid")
-    @JsonManagedReference
-    private Product product;
+
     public Product getProduct() {
         return product;
     }
@@ -62,10 +68,7 @@ public class Cart {
         this.product = product;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "colorid") // 資料庫Carts的欄位就叫colorid，別再改了！by HongJun
-    @JsonManagedReference
-    private ProductColor productColor;
+
 
     public ProductColor getProductColor() {
         return productColor;

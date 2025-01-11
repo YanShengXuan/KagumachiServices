@@ -2,22 +2,32 @@ package tw.com.services.kagumachi.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "Productimages")
+@Table(name = "productimages")
 public class ProductImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer imageid;
 
+    @ManyToOne
+    @JoinColumn(name = "productid")
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "colorsid")
+    private ProductColor productColor;
+
+
     private String imageurl;
     private Boolean isprimary;
-    private Date updatedat;
+    private LocalDate updatedat;
 
     public Integer getImageid() {
         return imageid;
@@ -44,18 +54,15 @@ public class ProductImage {
         this.isprimary = isprimary;
     }
 
-    public Date getUpdatedat() {
+    public LocalDate getUpdatedat() {
         return updatedat;
     }
 
-    public void setUpdatedat(Date updatedat) {
+    public void setUpdatedat(LocalDate updatedat) {
         this.updatedat = updatedat;
     }
-    
-    @ManyToOne
-    @JoinColumn(name = "productid")
-    @JsonBackReference
-    private Product product;
+
+
     public Product getProduct() {
         return product;
     }
@@ -64,10 +71,7 @@ public class ProductImage {
         this.product = product;
     }
     
-    @ManyToOne
-    @JoinColumn(name = "productcolorsid") // 資料庫ProductImages的欄位就叫productcolorsid，別再改了！by HongJun
-    @JsonManagedReference
-    private ProductColor productColor;
+
     public ProductColor getProductColor() {
         return productColor;
     }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "IncomeStatement")
+@Table(name = "incomestatement")
 public class IncomeStatement {
 
     @Id
@@ -12,10 +12,10 @@ public class IncomeStatement {
     private Integer incomestatementid;
 
     @ManyToOne
-    @JoinColumn(name = "productId")
+    @JoinColumn(name = "productid")
     private Product product;
 
-    private LocalDate month;
+    private LocalDate time;
 
     private Integer productcost;
     private Integer operatingrevenue;
@@ -43,12 +43,12 @@ public class IncomeStatement {
         this.product = product;
     }
 
-    public LocalDate getMonth() {
-        return month;
+    public LocalDate getTime() {
+        return time;
     }
 
-    public void setMonth(LocalDate month) {
-        this.month = month;
+    public void setTime(LocalDate time) {
+        this.time = time;
     }
 
     public Integer getProductcost() {

@@ -3,13 +3,14 @@ package tw.com.services.kagumachi.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "Members")
+@Table(name = "members")
 public class Member {
 
     @Id
@@ -23,7 +24,7 @@ public class Member {
     private Integer postalcode;
     private String city;
     private String address;
-    private Date registrationdate;
+    private LocalDate registrationdate;
     
     public Integer getMemberid() {
         return memberid;
@@ -88,15 +89,15 @@ public class Member {
         this.address = address;
     }
 
-    public Date getRegistrationdate() {
+    public LocalDate getRegistrationdate() {
         return registrationdate;
     }
 
-    public void setRegistrationdate(Date registrationdate) {
+    public void setRegistrationdate(LocalDate registrationdate) {
         this.registrationdate = registrationdate;
     }
-    
-//    @OneToMany(mappedBy = "member")
+
+    //    @OneToMany(mappedBy = "member")
 //    @JsonBackReference
 //	private List<Cart> cart;
 //    public List<Cart> getCarts() {

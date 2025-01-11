@@ -3,7 +3,7 @@ package tw.com.services.kagumachi.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Subcategories")
+@Table(name = "subcategory")
 public class SubCategory {
 
     @Id
@@ -11,7 +11,7 @@ public class SubCategory {
     private Integer subcategoryid;
 
     @ManyToOne
-    @JoinColumn(name = "maincategoriesid")
+    @JoinColumn(name = "maincategoryid")
     private MainCategory mainCategory;
 
     private String categoryname;

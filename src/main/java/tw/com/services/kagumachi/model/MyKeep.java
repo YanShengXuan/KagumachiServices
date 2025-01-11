@@ -3,7 +3,7 @@ package tw.com.services.kagumachi.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Mykeep")
+@Table(name = "mykeep")
 public class MyKeep {
 
     @Id

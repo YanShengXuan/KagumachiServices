@@ -3,17 +3,16 @@ package tw.com.services.kagumachi.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Sales")
+@Table(name = "sales")
 public class Sales {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "salesid")
     private Integer salesid;
 
     private String name;
 
-    private String desc;
+    private String salesdesc;
 
     private Double discount;
 
@@ -33,12 +32,12 @@ public class Sales {
         this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getSalesdesc() {
+        return salesdesc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setSalesdesc(String salesdesc) {
+        this.salesdesc = salesdesc;
     }
 
     public Double getDiscount() {
