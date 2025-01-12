@@ -51,7 +51,6 @@ public class MyKeepController {
             jsonObject.put("width", myKeep.getProduct().getWidth());
             jsonObject.put("depth", myKeep.getProduct().getDepth());
             jsonObject.put("height", myKeep.getProduct().getHeight());
-            // producklink還不知怎給，先不給。
             jsonObject.put("discountprice", myKeep.getProduct().getDiscountprice());
 
             List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);
