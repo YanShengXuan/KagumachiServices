@@ -56,8 +56,7 @@ public class MyKeepController {
 
             List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);
             JSONArray productdetails = new JSONArray();
-            for(int i = 0; i < productcolors.size(); i++) {
-                ProductColor productcolor = productcolors.get(i);
+            for (ProductColor productcolor : productcolors) {
                 JSONObject productdetail = new JSONObject();
                 productdetail.put("color", productcolor.getColorname());
                 productdetail.put("qty", productcolor.getStock());
