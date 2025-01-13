@@ -29,8 +29,8 @@ public class MyOrdersController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("orderid", order.getOrderid());
             jsonObject.put("orderdate", ft.format(order.getOrderdate()));
-            jsonObject.put("ordernumber", "20250112001"); // TODO 等資料庫有訂單編號欄位再改
-            jsonObject.put("paymentmethodid", order.getPaymentmethodid());
+            jsonObject.put("ordernumber", order.getOrderserial());
+            jsonObject.put("paymentmethod", order.getPaymentmethod());
             jsonObject.put("orderstatus", order.getOrderstatus());
             jsonObject.put("deliverydate", ft.format(order.getDeliverydate()));
             jsonObject.put("estimateddeliverydate", ft.format(order.getEstimateddeliverydate()));
