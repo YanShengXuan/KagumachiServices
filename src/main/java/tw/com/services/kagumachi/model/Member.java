@@ -25,6 +25,8 @@ public class Member {
     private String city;
     private String address;
     private LocalDate registrationdate;
+    private Integer gender;
+    private Date birthday;
     
     public Integer getMemberid() {
         return memberid;
@@ -97,14 +99,20 @@ public class Member {
         this.registrationdate = registrationdate;
     }
 
-    //    @OneToMany(mappedBy = "member")
-//    @JsonBackReference
-//	private List<Cart> cart;
-//    public List<Cart> getCarts() {
-//		return cart;
-//	}
-//	public void setCarts(List<Cart> cart) {
-//		this.cart = cart;
-//	}
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 }
 
