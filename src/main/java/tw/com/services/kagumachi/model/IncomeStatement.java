@@ -1,6 +1,6 @@
 package tw.com.services.kagumachi.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Incomestatement")
+@Table(name = "incomestatement")
 public class IncomeStatement {
 
     @Id
@@ -21,10 +21,11 @@ public class IncomeStatement {
     @ManyToOne
     @JoinColumn(name = "productid")
     private Product product;
-    
-    private Date time;
 
-	private Integer productcost;
+    private LocalDate time;
+
+    private Integer productcost;
+
     private Integer operatingrevenue;
     private Integer operatingexpenses;
     private Integer grossprofit;
@@ -34,14 +35,6 @@ public class IncomeStatement {
     private Integer capitalstock;
     private Integer earningspershare;
     
-
-    public Date getTime() {
-		return time;
-	}
-
-	public void setTime(Date time) {
-		this.time = time;
-	}
 
 	public Integer getIncomestatementid() {
         return incomestatementid;
@@ -59,6 +52,13 @@ public class IncomeStatement {
         this.product = product;
     }
 
+    public LocalDate getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDate time) {
+        this.time = time;
+    }
 
     public Integer getProductcost() {
         return productcost;

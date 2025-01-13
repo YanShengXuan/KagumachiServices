@@ -3,12 +3,12 @@ package tw.com.services.kagumachi.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Maincategories")
+@Table(name = "maincategory")
 public class MainCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer maincategoriesid;
+    private Integer maincategoryid;
 
     @ManyToOne
     @JoinColumn(name = "salesid")
@@ -17,12 +17,12 @@ public class MainCategory {
     private String categoryname;
     private String status;
 
-    public Integer getMaincategoriesid() {
-        return maincategoriesid;
+    public Integer getMaincategoryid() {
+        return maincategoryid;
     }
 
-    public void setMaincategoriesid(Integer maincategoriesid) {
-        this.maincategoriesid = maincategoriesid;
+    public void setMaincategoryid(Integer maincategoryid) {
+        this.maincategoryid = maincategoryid;
     }
 
     public Sales getSales() {

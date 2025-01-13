@@ -3,7 +3,7 @@ package tw.com.services.kagumachi.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Shiprate")
+@Table(name = "shiprate")
 public class ShipRate {
 
     @Id

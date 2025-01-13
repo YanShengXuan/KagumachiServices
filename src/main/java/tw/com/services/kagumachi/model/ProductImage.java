@@ -2,10 +2,10 @@ package tw.com.services.kagumachi.model;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "Productimages")
+@Table(name = "productimages")
 public class ProductImage {
 
     @Id
@@ -17,12 +17,13 @@ public class ProductImage {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "productcolorsid")
+    @JoinColumn(name = "colorsid")
     private ProductColor productColor;
+
 
     private String imageurl;
     private Boolean isprimary;
-    private Date updatedat;
+    private LocalDate updatedat;
 
     public Integer getImageid() {
         return imageid;
@@ -32,21 +33,6 @@ public class ProductImage {
         this.imageid = imageid;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public ProductColor getProductColor() {
-        return productColor;
-    }
-
-    public void setProductColor(ProductColor productColor) {
-        this.productColor = productColor;
-    }
 
     public String getImageurl() {
         return imageurl;
@@ -64,11 +50,29 @@ public class ProductImage {
         this.isprimary = isprimary;
     }
 
-    public Date getUpdatedat() {
+    public LocalDate getUpdatedat() {
         return updatedat;
     }
 
-    public void setUpdatedat(Date updatedat) {
+    public void setUpdatedat(LocalDate updatedat) {
         this.updatedat = updatedat;
+    }
+
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    
+
+    public ProductColor getProductColor() {
+        return productColor;
+    }
+
+    public void setProductColor(ProductColor productColor) {
+        this.productColor = productColor;
     }
 }

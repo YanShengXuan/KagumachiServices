@@ -3,12 +3,16 @@ package tw.com.services.kagumachi.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Suppliers")
+@Table(name = "suppliers")
 public class Suppliers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer supplierId;
+    private Integer supplierid;
+
+    @ManyToOne
+    @JoinColumn(name = "subcategoryid")
+    private SubCategory subCategory;
 
     private String name;
 
@@ -20,12 +24,21 @@ public class Suppliers {
 
     private String status;
 
-    public Integer getSupplierId() {
-        return supplierId;
+
+    public SubCategory getSubCategory() {
+        return subCategory;
     }
 
-    public void setSupplierId(Integer supplierId) {
-        this.supplierId = supplierId;
+    public void setSubCategory(SubCategory subCategory) {
+        this.subCategory = subCategory;
+    }
+
+    public Integer getSupplierid() {
+        return supplierid;
+    }
+
+    public void setSupplierid(Integer supplierid) {
+        this.supplierid = supplierid;
     }
 
     public String getName() {

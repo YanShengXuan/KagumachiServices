@@ -3,8 +3,9 @@ package tw.com.services.kagumachi.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+
 @Entity
-@Table(name = "Productcolors")
+@Table(name = "productcolors")
 public class ProductColor {
 
     @Id
@@ -14,7 +15,6 @@ public class ProductColor {
     @ManyToOne
     @JoinColumn(name = "productid")
     private Product product;
-
 
     private String colorname;
     private Integer stock;
@@ -27,14 +27,6 @@ public class ProductColor {
 
     public void setColorsid(Integer colorsid) {
         this.colorsid = colorsid;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     public Integer getStock() {
@@ -68,4 +60,25 @@ public class ProductColor {
     public void setUpdateat(LocalDate updateat) {
         this.updateat = updateat;
     }
+    
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    
+//  @OneToMany(mappedBy = "productColor")
+//	@JsonBackReference
+//	private List<Cart> cart;
+//    public List<Cart> getCarts() {
+//		return cart;
+//	}
+//	public void setCarts(List<Cart> cart) {
+//		this.cart = cart;
+//	}
+	
+
 }

@@ -1,9 +1,11 @@
 package tw.com.services.kagumachi.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Carts")
+@Table(name = "carts")
 public class Cart {
 
     @Id
@@ -11,16 +13,16 @@ public class Cart {
     private Integer cartsid;
 
     @ManyToOne
-    @JoinColumn(name = "memberId")
+    @JoinColumn(name = "memberid")
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "productId")
+    @JoinColumn(name = "productid")
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "colorId")
-    private ProductColor color;
+    @JoinColumn(name = "colorsid")
+    private ProductColor productColor;
 
     private Integer quantity;
 
@@ -32,30 +34,6 @@ public class Cart {
 
     public void setCartsid(Integer cartsid) {
         this.cartsid = cartsid;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public ProductColor getColor() {
-        return color;
-    }
-
-    public void setColor(ProductColor color) {
-        this.color = color;
     }
 
     public Integer getQuantity() {
@@ -73,4 +51,31 @@ public class Cart {
     public void setIspurchase(Boolean ispurchase) {
         this.ispurchase = ispurchase;
     }
+
+
+    public Member getMember() {
+        return member;
+    }
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+
+    public Product getProduct() {
+        return product;
+    }
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+
+
+    public ProductColor getProductColor() {
+        return productColor;
+    }
+
+    public void setProductColor(ProductColor productColor) {
+        this.productColor = productColor;
+    }
+
 }
