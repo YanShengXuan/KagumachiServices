@@ -1,5 +1,6 @@
 package tw.com.services.kagumachi.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,5 +11,5 @@ import tw.com.services.kagumachi.model.IncomeStatement;
 
 @Repository
 public interface IncomeStatementRepository extends JpaRepository<IncomeStatement, Integer> {
-	List<IncomeStatement> findByYear(Integer year);
+	List<IncomeStatement> findByTime(Date time);
 }

@@ -1,5 +1,7 @@
 package tw.com.services.kagumachi.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,7 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "IncomeStatement")
+@Table(name = "Incomestatement")
 public class IncomeStatement {
 
     @Id
@@ -17,27 +19,10 @@ public class IncomeStatement {
     private Integer incomestatementid;
 
     @ManyToOne
-    @JoinColumn(name = "productId")
+    @JoinColumn(name = "productid")
     private Product product;
-
-    private Integer month;
-    private Integer year;
-
-    public Integer getMonth() {
-		return month;
-	}
-
-	public void setMonth(Integer month) {
-		this.month = month;
-	}
-
-	public Integer getYear() {
-		return year;
-	}
-
-	public void setYear(Integer year) {
-		this.year = year;
-	}
+    
+    private Date time;
 
 	private Integer productcost;
     private Integer operatingrevenue;
@@ -48,8 +33,17 @@ public class IncomeStatement {
     private Integer netprofitaftertax;
     private Integer capitalstock;
     private Integer earningspershare;
+    
 
-    public Integer getIncomestatementid() {
+    public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
+	public Integer getIncomestatementid() {
         return incomestatementid;
     }
 
