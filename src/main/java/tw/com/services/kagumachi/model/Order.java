@@ -23,6 +23,7 @@ public class Order {
     private Date orderdate;
     private Date deliverydate;
     private Double totalprice;
+    private String orderserial;
 
     @ManyToOne
     @JoinColumn(name = "logisticsid")
@@ -59,7 +60,7 @@ public class Order {
         return paymentmethod;
     }
 
-    public void setPaymentmethodid(String paymentmethod) {
+    public void setPaymentmethod(String paymentmethod) {
         this.paymentmethod = paymentmethod;
     }
 
@@ -67,7 +68,7 @@ public class Order {
         return shippingmethod;
     }
 
-    public void setShippingmethodid(String shippingmethod) {
+    public void setShippingmethod(String shippingmethod) {
         this.shippingmethod = shippingmethod;
     }
 
@@ -126,4 +127,13 @@ public class Order {
     public void setEstimateddeliverydate(Date estimateddeliverydate) {
         this.estimateddeliverydate = estimateddeliverydate;
     }
+
+	public String getOrderserial() {
+		return orderserial;
+	}
+
+	public void setOrderserial(String orderserial) {
+		this.orderserial = orderserial;
+	}
+    
 }
