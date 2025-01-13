@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/setting")
-public class WebsiteController {
+public class SettingController {
     @Autowired
     private WebsiteRepository websiteRepository;
 
