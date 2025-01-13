@@ -1,4 +1,4 @@
-package tw.com.services.kagumachi.report.controller;
+package tw.com.services.kagumachi.controller;
 
 import java.util.List;
 
