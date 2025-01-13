@@ -17,8 +17,8 @@ public class Order {
     private Member member;
 
     private String orderstatus;
-    private Integer paymentmethodid;
-    private Integer shippingmethodid;
+    private String paymentmethod;
+    private String shippingmethod;
     private String ordercity;
     private Date orderdate;
     private Date deliverydate;
@@ -55,20 +55,20 @@ public class Order {
         this.orderstatus = orderstatus;
     }
 
-    public Integer getPaymentmethodid() {
-        return paymentmethodid;
+    public String getPaymentmethod() {
+        return paymentmethod;
     }
 
-    public void setPaymentmethodid(Integer paymentmethodid) {
-        this.paymentmethodid = paymentmethodid;
+    public void setPaymentmethodid(String paymentmethod) {
+        this.paymentmethod = paymentmethod;
     }
 
-    public Integer getShippingmethodid() {
-        return shippingmethodid;
+    public String getShippingmethod() {
+        return shippingmethod;
     }
 
-    public void setShippingmethodid(Integer shippingmethodid) {
-        this.shippingmethodid = shippingmethodid;
+    public void setShippingmethodid(String shippingmethod) {
+        this.shippingmethod = shippingmethod;
     }
 
     public String getOrdercity() {
