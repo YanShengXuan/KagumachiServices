@@ -91,7 +91,7 @@ public class HomePageController {
 //		    Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
 //		    
 //		    if (productImage.isPresent()) {
-//		        String imgurl = productImage.get().getImageurl();
+//		        String imgur                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      l = productImage.get().getImageurl();
 //		        System.out.println(imgurl);
 //		    } else {
 //		        System.out.println("Image not found for colorsid: " + colorsid);

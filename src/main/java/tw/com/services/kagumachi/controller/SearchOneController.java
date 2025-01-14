@@ -33,14 +33,13 @@ public class SearchOneController {
 	private ProductColorRepository productColorRepository;
 	
 	@GetMapping("/sone/{se}")
-	public void getProducts(@PathVariable String se) {
+	public String getProducts(@PathVariable String se) {
 		List<Product> list = productrepository.findByProductnameContaining(se);
 		System.out.println(list.size());
 		for (Product product : list) {
 			System.out.printf("%s\n", product.getProductname());
 		}
-		
-		
+
 		JSONArray jsonarray = new JSONArray();
 		
 		for(Product product : list) {
@@ -49,9 +48,15 @@ public class SearchOneController {
 			jsonobject.put("dataname", product.getProductname());
 			
 			int productid = product.getProductid();
-			List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);
-			int colorsid = productcolors.get(0).getColorsid();
-			Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);//與color資料表連接
-		}
+			List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);   
+            int colorsid = productcolors.get(0).getColorsid();
+            Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);//與color資料表連接
+            String imgurl = productImage.get().getImageurl();
+			jsonobject.put("dataimage", imgurl);
+			jsonobject.put("dataprice", product.getDiscountprice());
+			
+			jsonarray.put(jsonobject);	
+			}
+		return jsonarray.toString();
 	}
 }
