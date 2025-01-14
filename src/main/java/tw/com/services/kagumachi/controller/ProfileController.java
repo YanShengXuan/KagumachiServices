@@ -39,13 +39,15 @@ public class ProfileController {
 
     @PutMapping
     public String updateProfile(@RequestBody Map<String, Object> payload) {
-        System.out.println(payload);
         Integer memberid = (Integer) payload.get("memberid");
         Optional<Member> optionalMember = memberRepository.findByMemberid(memberid);
         if (optionalMember.isPresent()) {
             Member member = optionalMember.get();
             member.setRealname((String) payload.get("chinese_name"));
-            member.setPassword(BCrypt.hashpw((String) payload.get("password"), BCrypt.gensalt()));
+            String password = (String) payload.get("password");
+            if (password != null && !password.isEmpty()) {
+                member.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+            }
             member.setGender(Integer.valueOf((String) payload.get("gender")));
             SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
             try {
