@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tw.com.services.kagumachi.dto.CartDto;
 import tw.com.services.kagumachi.model.Cart;
+import tw.com.services.kagumachi.model.ProductImage;
 import tw.com.services.kagumachi.repository.CartRepository;
+import tw.com.services.kagumachi.repository.ProductImageRepository;
 import tw.com.services.kagumachi.service.CartService;
 
 @RestController
@@ -24,6 +26,9 @@ public class CartController {
 	
 	@Autowired
 	CartService cartService;
+	
+	@Autowired
+	ProductImageRepository productImageRepository;
 	
 	@GetMapping("/step1/{memberid}")
 	public List<CartDto> carts(@PathVariable Integer memberid) {
