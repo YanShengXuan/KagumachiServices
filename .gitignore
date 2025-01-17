@@ -38,3 +38,6 @@ build/
 備忘.txt
 
 .DS_Store
+
+# 忽略 application.properties
+src/main/resources/application.properties

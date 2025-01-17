@@ -9,5 +9,11 @@ import java.util.List;
 import java.util.Optional;
 @Repository
 public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
-    List<ProductImage> findByProduct_ProductidAndProductColor_Colorsid(Integer productid, Integer colorsid);
+
+
+    // 一個 ProductImage
+    Optional<ProductImage> findByProduct_ProductidAndProductColor_Colorsid(Integer productid, Integer colorsid);
+
+    // 多個 ProductImage
+    List<ProductImage> findAllByProduct_ProductidAndProductColor_Colorsid(Integer productid, Integer colorsid);
 }

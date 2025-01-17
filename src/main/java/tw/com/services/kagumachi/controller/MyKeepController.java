@@ -60,7 +60,7 @@ public class MyKeepController {
                 productdetail.put("color", productcolor.getColorname());
                 productdetail.put("qty", productcolor.getStock());
                 int colorsid = productcolor.getColorsid();
-                List<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
+                List<ProductImage> productImage = productImageRepository.findAllByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
                 String imageUrl = productImage.stream()
                         .findFirst()
                         .map(ProductImage::getImageurl)
