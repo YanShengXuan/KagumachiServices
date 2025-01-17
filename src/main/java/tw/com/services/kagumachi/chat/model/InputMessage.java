@@ -5,7 +5,6 @@ public class InputMessage {
     private String senderid;
     private String receiverid;
 
-    // Getters and Setters
     public String getContent() {
         return content;
     }
