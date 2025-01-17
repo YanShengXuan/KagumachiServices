@@ -1,13 +1,11 @@
 package tw.com.services.kagumachi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 import tw.com.services.kagumachi.dto.ProductDTO;
 import tw.com.services.kagumachi.model.*;
 import tw.com.services.kagumachi.repository.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +23,12 @@ public class ProductService {
 
     @Autowired
     private SuppliersRepository suppliersRepository;
+
+    @Autowired
+    private MainCategoryRepository mainCategoryRepository;
+
+    @Autowired
+    private SubCategoryRepository subCategoryRepository;
 
     public Product addProduct(ProductDTO productDTO) {
         // 1. 將 ProductDTO 映射為 Product
@@ -124,18 +128,8 @@ public class ProductService {
             dto.setUpdateat(product.getUpdateat());
 
             // 設置 Supplier
-            ProductDTO.SupplierDTO supplierDTO = new ProductDTO.SupplierDTO();
-            supplierDTO.setSupplierid(product.getSupplier().getSupplierid());
-            supplierDTO.setName(product.getSupplier().getName());
-            supplierDTO.setAddress(product.getSupplier().getAddress());
-            supplierDTO.setPhone(product.getSupplier().getPhone());
-            supplierDTO.setContact(product.getSupplier().getContact());
-            supplierDTO.setStatus(product.getSupplier().getStatus());
-
-            dto.setSuppliers(supplierDTO);
-
-            // 設置 MainCategory 和 SubCategory
             if (product.getMainCategory() != null) {
+                dto.setMaincategoryid(product.getMainCategory().getMaincategoryid()); // 設置主類別 ID
                 ProductDTO.MainCategoryDTO mainCategory = new ProductDTO.MainCategoryDTO();
                 mainCategory.setMaincategoryid(product.getMainCategory().getMaincategoryid());
                 mainCategory.setCategoryname(product.getMainCategory().getCategoryname());
@@ -144,11 +138,24 @@ public class ProductService {
             }
 
             if (product.getSubCategory() != null) {
+                dto.setSubcategoryid(product.getSubCategory().getSubcategoryid()); // 設置副類別 ID
                 ProductDTO.SubCategoryDTO subCategory = new ProductDTO.SubCategoryDTO();
                 subCategory.setSubcategoryid(product.getSubCategory().getSubcategoryid());
                 subCategory.setCategoryname(product.getSubCategory().getCategoryname());
                 subCategory.setStatus(product.getSubCategory().getStatus());
                 dto.setSubCategory(subCategory);
+            }
+
+            if (product.getSupplier() != null) {
+                dto.setSupplierid(product.getSupplier().getSupplierid()); // 設置廠商 ID
+                ProductDTO.SupplierDTO supplierDTO = new ProductDTO.SupplierDTO();
+                supplierDTO.setSupplierid(product.getSupplier().getSupplierid());
+                supplierDTO.setName(product.getSupplier().getName());
+                supplierDTO.setAddress(product.getSupplier().getAddress());
+                supplierDTO.setPhone(product.getSupplier().getPhone());
+                supplierDTO.setContact(product.getSupplier().getContact());
+                supplierDTO.setStatus(product.getSupplier().getStatus());
+                dto.setSuppliers(supplierDTO);
             }
 
             // 設置 ProductColors
@@ -162,7 +169,7 @@ public class ProductService {
                 colorDTO.setUpdateat(color.getUpdateat());
 
                 // 查詢顏色相關的圖片
-                List<ProductImage> images = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(
+                List<ProductImage> images = productImageRepository.findAllByProduct_ProductidAndProductColor_Colorsid(
                         product.getProductid(), color.getColorsid());
                 List<ProductDTO.ProductImageDTO> imageDTOs = images.stream().map(image -> {
                     ProductDTO.ProductImageDTO imageDTO = new ProductDTO.ProductImageDTO();
@@ -180,5 +187,119 @@ public class ProductService {
             dto.setProductColors(colorDTOs);
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    public List<MainCategory> getAllMainCategories() {
+        return mainCategoryRepository.findAll();
+    }
+
+    public List<SubCategory> getSubCategoriesByMainCategoryId(Long mainCategoryId) {
+        return subCategoryRepository.findByMainCategory_Maincategoryid(mainCategoryId);
+    }
+
+    //廠商名稱查詢
+    public List<Suppliers> getAllSuppliers() {
+        return suppliersRepository.findAll();
+    }
+
+    public Product updateProduct(Integer productid, ProductDTO productDTO) {
+
+
+
+        // 查找現有的 Product
+        Product existingProduct = productRepository.findById(productid)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productid));
+
+
+        // 更新基本信息
+        existingProduct.setProductname(productDTO.getProductname());
+        existingProduct.setProductdescription(productDTO.getProductdescription());
+        existingProduct.setWidth(productDTO.getWidth());
+        existingProduct.setHeight(productDTO.getHeight());
+        existingProduct.setDepth(productDTO.getDepth());
+        existingProduct.setUnitprice(productDTO.getUnitprice());
+        existingProduct.setDiscountprice(productDTO.getDiscountprice());
+        existingProduct.setProductcost(productDTO.getProductcost());
+        existingProduct.setStatus(productDTO.getStatus());
+        existingProduct.setUnitsold(productDTO.getUnitsold());
+        existingProduct.setRating(productDTO.getRating());
+        existingProduct.setReviewcount(productDTO.getReviewcount());
+        existingProduct.setUpdateat(productDTO.getUpdateat());
+
+        // 更新 MainCategory
+        if (productDTO.getMaincategoryid() != null) {
+            MainCategory mainCategory = mainCategoryRepository.findById(productDTO.getMaincategoryid())
+                    .orElseThrow(() -> new RuntimeException("MainCategory not found with id: " + productDTO.getMaincategoryid()));
+            existingProduct.setMainCategory(mainCategory);
+        }
+
+        // 更新 SubCategory
+        if (productDTO.getSubcategoryid() != null) {
+            SubCategory subCategory = subCategoryRepository.findById(productDTO.getSubcategoryid())
+                    .orElseThrow(() -> new RuntimeException("SubCategory not found with id: " + productDTO.getSubcategoryid()));
+            existingProduct.setSubCategory(subCategory);
+        }
+
+        // 更新 Supplier
+        if (productDTO.getSupplierid() != null) {
+            Suppliers supplier = suppliersRepository.findById(productDTO.getSupplierid())
+                    .orElseThrow(() -> new RuntimeException("Supplier not found with id: " + productDTO.getSupplierid()));
+            existingProduct.setSupplier(supplier);
+        }
+
+        // 保存更新的 Product
+        existingProduct = productRepository.save(existingProduct);
+
+        // 處理商品顏色
+        if (productDTO.getProductColors() != null) {
+            for (ProductDTO.ProductColorDTO colorDTO : productDTO.getProductColors()) {
+                ProductColor color;
+
+                // 檢查是否為更新或新增
+                if (colorDTO.getColorsid() != null) {
+                    // 更新顏色
+                    color = productColorRepository.findById(colorDTO.getColorsid())
+                            .orElseThrow(() -> new RuntimeException("Color not found with id: " + colorDTO.getColorsid()));
+                } else {
+                    // 新增顏色
+                    color = new ProductColor();
+                    color.setProduct(existingProduct); // 關聯到產品
+                }
+
+                // 更新或設置顏色屬性
+                color.setColorname(colorDTO.getColorname());
+                color.setStock(colorDTO.getStock());
+                color.setMinstock(colorDTO.getMinstock());
+                color.setUpdateat(colorDTO.getUpdateat());
+                productColorRepository.save(color); // 保存顏色
+
+                // 處理顏色的圖片
+                if (colorDTO.getProductImages() != null) {
+                    for (ProductDTO.ProductImageDTO imageDTO : colorDTO.getProductImages()) {
+                        ProductImage image;
+
+                        // 檢查是否為更新或新增
+                        if (imageDTO.getImageid() != null) {
+                            // 更新圖片
+                            image = productImageRepository.findById(imageDTO.getImageid())
+                                    .orElseThrow(() -> new RuntimeException("Image not found with id: " + imageDTO.getImageid()));
+                        } else {
+                            // 新增圖片
+                            image = new ProductImage();
+                            image.setProduct(existingProduct); // 關聯到產品
+                            image.setProductColor(color);      // 關聯到顏色
+                        }
+
+                        // 更新或設置圖片屬性
+                        image.setImageurl(imageDTO.getImageurl());
+                        image.setIsprimary(imageDTO.getIsprimary());
+                        image.setUpdatedat(imageDTO.getUpdatedat());
+                        productImageRepository.save(image); // 保存圖片
+                    }
+                }
+            }
+        }
+
+        return existingProduct;
     }
 }
