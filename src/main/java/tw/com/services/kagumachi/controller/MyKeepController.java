@@ -60,8 +60,13 @@ public class MyKeepController {
                 productdetail.put("color", productcolor.getColorname());
                 productdetail.put("qty", productcolor.getStock());
                 int colorsid = productcolor.getColorsid();
-                Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
-                productdetail.put("imgsrc", productImage.isPresent() ? productImage.get().getImageurl() : "");
+                List<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
+                String imageUrl = productImage.stream()
+                        .findFirst()
+                        .map(ProductImage::getImageurl)
+                        .orElse(""); // 如果沒有圖片，返回空字串
+
+                productdetail.put("imgsrc", imageUrl);
                 productdetails.put(productdetail);
             }
             jsonObject.put("productdetails", productdetails);
