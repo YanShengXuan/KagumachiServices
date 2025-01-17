@@ -41,3 +41,6 @@ build/
 
 # 忽略 application.properties
 src/main/resources/application.properties
+
+# 忽略 Firebase 服務帳戶憑證
+src/main/resources/firebase-service-account.json
