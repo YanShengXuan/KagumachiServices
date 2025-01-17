@@ -1,7 +1,7 @@
 package tw.com.services.kagumachi.dto;
 
 
-public class CartResponseDto {
+public class CartDto {
 	private Integer cartsid;
 	private String productname;
 	private String colorname;

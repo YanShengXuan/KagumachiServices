@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
-import tw.com.services.kagumachi.dto.CartResponseDto;
+import tw.com.services.kagumachi.dto.CartDto;
 import tw.com.services.kagumachi.model.Cart;
 import tw.com.services.kagumachi.model.ProductImage;
 import tw.com.services.kagumachi.repository.CartRepository;
@@ -23,12 +23,12 @@ public class CartService {
 	@Autowired
 	private ProductImageRepository productImageRepository;
 	
-	public List<CartResponseDto> getCartAndImg(@Param("memberId") Integer memberId){
+	public List<CartDto> getCartAndImg(@Param("memberId") Integer memberId){
 		List<Cart> carts = cartRepository.findByMember_Memberid(memberId);
 		
-		List<CartResponseDto> result = new ArrayList<CartResponseDto>();
+		List<CartDto> result = new ArrayList<CartDto>();
 		for(Cart cart : carts) {
-			CartResponseDto dto = new CartResponseDto();
+			CartDto dto = new CartDto();
 			dto.setCartsid(cart.getCartsid());
 			dto.setProductname(cart.getProduct().getProductname());
 			dto.setColorname(cart.getProductColor().getColorname());
