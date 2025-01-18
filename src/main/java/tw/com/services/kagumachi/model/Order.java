@@ -2,6 +2,7 @@ package tw.com.services.kagumachi.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -20,8 +21,8 @@ public class Order {
     private String paymentmethod;
     private String shippingmethod;
     private String ordercity;
-    private Date orderdate;
-    private Date deliverydate;
+    private LocalDate orderdate;
+    private LocalDate deliverydate;
     private Double totalprice;
     private String orderserial;
 
@@ -80,19 +81,19 @@ public class Order {
         this.ordercity = ordercity;
     }
 
-    public Date getOrderdate() {
+    public LocalDate getOrderdate() {
         return orderdate;
     }
 
-    public void setOrderdate(Date orderdate) {
+    public void setOrderdate(LocalDate orderdate) {
         this.orderdate = orderdate;
     }
 
-    public Date getDeliverydate() {
+    public LocalDate getDeliverydate() {
         return deliverydate;
     }
 
-    public void setDeliverydate(Date deliverydate) {
+    public void setDeliverydate(LocalDate deliverydate) {
         this.deliverydate = deliverydate;
     }
 
