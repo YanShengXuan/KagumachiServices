@@ -22,7 +22,6 @@ public class SecurityConfig {
                     corsConfiguration.setAllowCredentials(true);
                     return corsConfiguration;
                 }));
-        // ...existing security configurations...
         return http.build();
     }
 }
