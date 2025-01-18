@@ -1,10 +1,10 @@
-package tw.emma.kaguv2.service;
+package tw.com.services.kagumachi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import tw.emma.kaguv2.model.Member;
-import tw.emma.kaguv2.repository.MemberRepository;
+import tw.com.services.kagumachi.model.Member;
+import tw.com.services.kagumachi.repository.MemberRepository;
+
 
 import java.util.List;
 

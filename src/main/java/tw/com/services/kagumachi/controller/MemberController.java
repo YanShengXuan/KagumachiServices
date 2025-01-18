@@ -1,10 +1,10 @@
-package tw.emma.kaguv2.controller;
+package tw.com.services.kagumachi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tw.emma.kaguv2.model.Member;
-import tw.emma.kaguv2.service.MemberService;
+import tw.com.services.kagumachi.model.Member;
+import tw.com.services.kagumachi.service.MemberService;
 
 import java.util.List;
 
