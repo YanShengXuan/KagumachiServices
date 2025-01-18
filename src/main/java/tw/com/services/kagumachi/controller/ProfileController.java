@@ -39,7 +39,12 @@ public class ProfileController {
 
     @PutMapping
     public String updateProfile(@RequestBody Map<String, Object> payload) {
-        Integer memberid = (Integer) payload.get("memberid");
+        Integer memberid;
+        try {
+            memberid = Integer.valueOf((String) payload.get("memberid"));
+        } catch (NumberFormatException e) {
+            return "Invalid member ID format";
+        }
         Optional<Member> optionalMember = memberRepository.findByMemberid(memberid);
         if (optionalMember.isPresent()) {
             Member member = optionalMember.get();

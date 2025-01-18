@@ -28,11 +28,11 @@ public class MyOrdersController {
         for (Order order : orders) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("orderid", order.getOrderid());
-            jsonObject.put("orderdate", ft.format(order.getOrderdate()));
+            jsonObject.put("orderdate", order.getOrderdate());
             jsonObject.put("ordernumber", order.getOrderserial());
             jsonObject.put("paymentmethod", order.getPaymentmethod());
             jsonObject.put("orderstatus", order.getOrderstatus());
-            jsonObject.put("deliverydate", ft.format(order.getDeliverydate()));
+            jsonObject.put("deliverydate", order.getDeliverydate());
             jsonObject.put("estimateddeliverydate", ft.format(order.getEstimateddeliverydate()));
             jsonObject.put("totalprice", order.getTotalprice());
             jsonArray.put(jsonObject);
