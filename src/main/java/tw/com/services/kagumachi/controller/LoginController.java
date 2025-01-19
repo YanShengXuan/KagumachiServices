@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tw.com.services.kagumachi.Util.JwtUtil;
+import tw.com.services.kagumachi.util.JwtUtil;
 import tw.com.services.kagumachi.model.Member;
 import tw.com.services.kagumachi.repository.MemberRepository;
 import tw.com.services.kagumachi.service.LoginService;

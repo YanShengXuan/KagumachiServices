@@ -24,10 +24,10 @@ public class CategoryService {
         mainCategoryRepository.save(mainCategory);
     }
 
-    public void addSubCategory(SubCategory subCategory, Integer maincategoryid) {
-        MainCategory mainCategory = mainCategoryRepository.findById(maincategoryid)
-                .orElseThrow(() -> new IllegalArgumentException("找不到對應的主分類"));
-
+    public void addSubCategory(SubCategory subCategory, MainCategory mainCategory) {
+        if (mainCategory == null) {
+            throw new IllegalArgumentException("主分類不能為空");
+        }
         subCategory.setMainCategory(mainCategory);
         subCategoryRepository.save(subCategory);
     }

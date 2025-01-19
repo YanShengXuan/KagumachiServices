@@ -3,6 +3,7 @@ package tw.com.services.kagumachi.controller;
 
 import com.sun.tools.javac.Main;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tw.com.services.kagumachi.model.MainCategory;
 import tw.com.services.kagumachi.model.SubCategory;
@@ -59,10 +60,11 @@ public class CategoryController {
     }
 
     @PostMapping("/addSub")
-    public void addSubCategory(@RequestBody SubCategory subCategory) {
+    public ResponseEntity<String> addSubCategory(@RequestBody SubCategory subCategory) {
         if (subCategory.getMainCategory() == null) {
-            throw new IllegalArgumentException("主分類 ID 不能為空");
+            return ResponseEntity.badRequest().body("錯誤：必須提供主分類");
         }
-        categoryService.addSubCategory(subCategory, subCategory.getMainCategory().getMaincategoryid());
+        categoryService.addSubCategory(subCategory, subCategory.getMainCategory());
+        return ResponseEntity.ok("子分類新增成功");
     }
 }
