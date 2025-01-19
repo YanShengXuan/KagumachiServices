@@ -27,6 +27,7 @@ public class ProductDTO implements Serializable {
     private SupplierDTO suppliers;
     private List<ProductColorDTO> productColors;
 
+
     public Integer getProductid() {
         return productid;
     }
@@ -90,6 +91,7 @@ public class ProductDTO implements Serializable {
     public void setSubCategory(SubCategoryDTO subCategory) {
         this.subCategory = subCategory;
     }
+
 
 
 
@@ -300,6 +302,15 @@ public class ProductDTO implements Serializable {
         private Integer maincategoryid;
         private String categoryname;
         private String status;
+        private SalesDTO sales;
+
+        public SalesDTO getSales() {
+            return sales;
+        }
+
+        public void setSales(SalesDTO sales) {
+            this.sales = sales;
+        }
 
         public Integer getMaincategoryid() {
             return maincategoryid;
@@ -418,6 +429,44 @@ public class ProductDTO implements Serializable {
 
         public void setStatus(String status) {
             this.status = status;
+        }
+    }
+    public static class SalesDTO implements Serializable {
+        private Integer salesid;
+        private String name;
+        private String salesdesc;
+        private Double discount;
+
+        public Integer getSalesid() {
+            return salesid;
+        }
+
+        public void setSalesid(Integer salesid) {
+            this.salesid = salesid;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getSalesdesc() {
+            return salesdesc;
+        }
+
+        public void setSalesdesc(String salesdesc) {
+            this.salesdesc = salesdesc;
+        }
+
+        public Double getDiscount() {
+            return discount;
+        }
+
+        public void setDiscount(Double discount) {
+            this.discount = discount;
         }
     }
 }

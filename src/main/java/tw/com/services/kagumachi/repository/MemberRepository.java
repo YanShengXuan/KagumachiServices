@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import tw.com.services.kagumachi.model.Member;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -14,6 +15,8 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     Optional<Member> findByEmail(String email);
 
     Optional<Member> findByMemberid(Integer memberid);
+
+    List<Member> findByEmailContainingOrPhoneContaining(String email, String phone);
 }
 
 

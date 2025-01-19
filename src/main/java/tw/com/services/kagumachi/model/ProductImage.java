@@ -33,7 +33,6 @@ public class ProductImage {
         this.imageid = imageid;
     }
 
-
     public String getImageurl() {
         return imageurl;
     }

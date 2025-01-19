@@ -31,7 +31,7 @@ public class Order {
     private Logistics logistics;
 
     private String logisticsnumber;
-    private Date estimateddeliverydate;
+    private LocalDate estimateddeliverydate;
 
     public Integer getOrderid() {
         return orderid;
@@ -121,15 +121,15 @@ public class Order {
         this.logisticsnumber = logisticsnumber;
     }
 
-    public Date getEstimateddeliverydate() {
+    public LocalDate getEstimateddeliverydate() {
         return estimateddeliverydate;
     }
 
-    public void setEstimateddeliverydate(Date estimateddeliverydate) {
+    public void setEstimateddeliverydate(LocalDate estimateddeliverydate) {
         this.estimateddeliverydate = estimateddeliverydate;
     }
 
-	public String getOrderserial() {
+    public String getOrderserial() {
 		return orderserial;
 	}
 
