@@ -15,4 +15,8 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Inte
 
     // 多個 ProductImage
     List<ProductImage> findAllByProduct_ProductidAndProductColor_Colorsid(Integer productid, Integer colorsid);
+
+    List<ProductImage> findAllByProductColor_Colorsid(Integer colorsid);
+
+    List<ProductImage> findAllByProduct_Productid(Integer productid);
 }

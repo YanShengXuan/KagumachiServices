@@ -1,6 +1,8 @@
 package tw.com.services.kagumachi.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import tw.com.services.kagumachi.model.Product;
@@ -15,5 +17,17 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	List<Product> findByProductnameContaining(String productname);
 
     @EntityGraph(attributePaths = {"mainCategory", "subCategory", "supplier"})
-    List<Product> findAll(); // 查詢所有商品及其關聯資料
+    List<Product> findAll();
+
+    @EntityGraph(attributePaths = {"mainCategory", "subCategory", "supplier"})
+    @Query("SELECT p FROM Product p WHERE " +
+            "(COALESCE(:productname, '') = '' OR p.productname LIKE %:productname%) AND " +
+            "(COALESCE(:maincategoryid, 0) = 0 OR p.mainCategory.maincategoryid = :maincategoryid) AND " +
+            "(COALESCE(:subcategoryid, 0) = 0 OR p.subCategory.subcategoryid = :subcategoryid)")
+    List<Product> searchProducts(
+            @Param("productname") String productname,
+            @Param("maincategoryid") Integer maincategoryid,
+            @Param("subcategoryid") Integer subcategoryid);
+
+
 }

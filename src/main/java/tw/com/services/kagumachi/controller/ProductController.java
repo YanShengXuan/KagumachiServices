@@ -61,10 +61,8 @@ public class ProductController {
             @RequestBody ProductDTO productDTO
     ) {
         try {
-            // 調用 Service 的更新方法
             Product updatedProduct = productService.updateProduct(productId, productDTO);
 
-            // 將更新後的實體轉換為 DTO 返回
             ProductDTO updatedProductDTO = new ProductDTO();
             updatedProductDTO.setProductid(updatedProduct.getProductid());
             updatedProductDTO.setProductname(updatedProduct.getProductname());
@@ -86,6 +84,35 @@ public class ProductController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);
         }
+    }
+
+    @DeleteMapping("/delete/{productid}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer productid) {
+        try {
+            productService.deleteProductById(productid);
+            return ResponseEntity.ok("商品刪除成功！");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("刪除商品時發生錯誤: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/deletecolor/{colorId}")
+    public ResponseEntity<String> deleteProductColor(@PathVariable Integer colorId) {
+        try {
+            productService.deleteProductColorById(colorId);
+            return ResponseEntity.ok("顏色刪除成功！");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("刪除顏色失敗: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/search")
+    public List<ProductDTO> searchProducts(
+            @RequestParam(required = false) String productname,
+            @RequestParam(required = false) Integer maincategoryid,
+            @RequestParam(required = false) Integer subcategoryid
+    ) {
+        return productService.searchProducts(productname, maincategoryid, subcategoryid);
     }
 
 

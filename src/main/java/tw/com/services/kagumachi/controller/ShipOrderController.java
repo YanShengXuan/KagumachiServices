@@ -27,6 +27,9 @@ public class ShipOrderController {
             String comname = order.getLogistics().getComname();
             jsonObject.put("logisticsCompany", comname);
             jsonObject.put("logisticsNumber", order.getLogisticsnumber());
+            jsonObject.put("orderdate", order.getOrderdate());
+            jsonObject.put("deliverydate", order.getDeliverydate());
+            jsonObject.put("estimateddeliverydate", order.getEstimateddeliverydate());
             jsonArray.put(jsonObject);
         }
         return jsonArray.toString();
