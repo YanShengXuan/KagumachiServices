@@ -12,8 +12,5 @@ import java.util.Optional;
 public interface ProductColorRepository extends JpaRepository<ProductColor, Integer> {
     List<ProductColor> findByProduct_Productid(Integer productid);
 
-    List<ProductColor> findAllByProduct_ProductidAndColorname(Integer productid, String colorname);
-
-
     Optional<ProductColor> findByProduct_ProductidAndColorname(Integer productid, String colorname);
 }

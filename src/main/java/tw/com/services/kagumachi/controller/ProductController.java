@@ -61,10 +61,8 @@ public class ProductController {
             @RequestBody ProductDTO productDTO
     ) {
         try {
-            // 調用 Service 的更新方法
             Product updatedProduct = productService.updateProduct(productId, productDTO);
 
-            // 將更新後的實體轉換為 DTO 返回
             ProductDTO updatedProductDTO = new ProductDTO();
             updatedProductDTO.setProductid(updatedProduct.getProductid());
             updatedProductDTO.setProductname(updatedProduct.getProductname());
@@ -106,6 +104,15 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("刪除顏色失敗: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/search")
+    public List<ProductDTO> searchProducts(
+            @RequestParam(required = false) String productname,
+            @RequestParam(required = false) Integer maincategoryid,
+            @RequestParam(required = false) Integer subcategoryid
+    ) {
+        return productService.searchProducts(productname, maincategoryid, subcategoryid);
     }
 
 
