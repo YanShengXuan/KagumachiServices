@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import tw.com.services.kagumachi.model.Order;
 import tw.com.services.kagumachi.repository.OrderRepository;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
@@ -22,7 +21,6 @@ public class MyOrdersController {
 
     @GetMapping
     public String getAllMyOrders(@RequestParam Integer memberid) {
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
         JSONArray jsonArray = new JSONArray();
         List<Order> orders = orderRepository.findByMember_Memberid(memberid);
         for (Order order : orders) {
@@ -33,7 +31,7 @@ public class MyOrdersController {
             jsonObject.put("paymentmethod", order.getPaymentmethod());
             jsonObject.put("orderstatus", order.getOrderstatus());
             jsonObject.put("deliverydate", order.getDeliverydate());
-            jsonObject.put("estimateddeliverydate", ft.format(order.getEstimateddeliverydate()));
+            jsonObject.put("estimateddeliverydate", order.getEstimateddeliverydate());
             jsonObject.put("totalprice", order.getTotalprice());
             jsonArray.put(jsonObject);
         }
