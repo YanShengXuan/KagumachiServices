@@ -24,12 +24,14 @@ public class CategoryService {
         mainCategoryRepository.save(mainCategory);
     }
 
-    public void addSubCategory(SubCategory subCategory, MainCategory mainCategory) {
+    public SubCategory addSubCategory(SubCategory subCategory, MainCategory mainCategory) {
         if (mainCategory == null) {
             throw new IllegalArgumentException("主分類不能為空");
         }
         subCategory.setMainCategory(mainCategory);
         subCategoryRepository.save(subCategory);
+
+        return subCategoryRepository.save(subCategory);
     }
 
     // 刪

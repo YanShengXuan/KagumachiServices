@@ -88,6 +88,26 @@ public class ProductController {
         }
     }
 
+    @DeleteMapping("/delete/{productid}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer productid) {
+        try {
+            productService.deleteProductById(productid);
+            return ResponseEntity.ok("商品刪除成功！");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("刪除商品時發生錯誤: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/deletecolor/{colorId}")
+    public ResponseEntity<String> deleteProductColor(@PathVariable Integer colorId) {
+        try {
+            productService.deleteProductColorById(colorId);
+            return ResponseEntity.ok("顏色刪除成功！");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("刪除顏色失敗: " + e.getMessage());
+        }
+    }
+
 
 
 }

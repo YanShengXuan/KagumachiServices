@@ -7,6 +7,7 @@ import tw.com.services.kagumachi.model.*;
 import tw.com.services.kagumachi.repository.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,6 +84,7 @@ public class ProductService {
 
                 // 儲存 ProductColor
                 color = productColorRepository.save(color);
+
 
                 // 4. 處理 ProductImage
                 if (colorDTO.getProductImages() != null) {
@@ -204,7 +206,7 @@ public class ProductService {
 
     public Product updateProduct(Integer productid, ProductDTO productDTO) {
 
-
+        System.out.println("productid  "+productid);
 
         // 查找現有的 Product
         Product existingProduct = productRepository.findById(productid)
@@ -250,8 +252,13 @@ public class ProductService {
         // 保存更新的 Product
         existingProduct = productRepository.save(existingProduct);
 
+        System.out.println("existingProduct  "+existingProduct.getProductid());
+
         // 處理商品顏色
         if (productDTO.getProductColors() != null) {
+
+            System.out.println("ProductDTO"+productDTO.getProductColors());
+
             for (ProductDTO.ProductColorDTO colorDTO : productDTO.getProductColors()) {
                 ProductColor color;
 
@@ -260,18 +267,25 @@ public class ProductService {
                     // 更新顏色
                     color = productColorRepository.findById(colorDTO.getColorsid())
                             .orElseThrow(() -> new RuntimeException("Color not found with id: " + colorDTO.getColorsid()));
+                    System.out.println("UpdateColor "+colorDTO.getColorsid());
                 } else {
                     // 新增顏色
                     color = new ProductColor();
                     color.setProduct(existingProduct); // 關聯到產品
+
                 }
+
 
                 // 更新或設置顏色屬性
                 color.setColorname(colorDTO.getColorname());
                 color.setStock(colorDTO.getStock());
                 color.setMinstock(colorDTO.getMinstock());
                 color.setUpdateat(colorDTO.getUpdateat());
-                productColorRepository.save(color); // 保存顏色
+                ProductColor tmp = productColorRepository.save(color);// 保存顏色
+                System.out.println("ADDCOLOR COLOR"+ tmp.getColorsid());
+                System.out.println("AddColor"+colorDTO.getColorsid());
+                System.out.println("AddColor"+ colorDTO.getColorname());
+
 
                 // 處理顏色的圖片
                 if (colorDTO.getProductImages() != null) {
@@ -283,6 +297,7 @@ public class ProductService {
                             // 更新圖片
                             image = productImageRepository.findById(imageDTO.getImageid())
                                     .orElseThrow(() -> new RuntimeException("Image not found with id: " + imageDTO.getImageid()));
+                            System.out.println("更新"+imageDTO.getImageid());
                         } else {
                             // 新增圖片
                             image = new ProductImage();
@@ -295,11 +310,56 @@ public class ProductService {
                         image.setIsprimary(imageDTO.getIsprimary());
                         image.setUpdatedat(imageDTO.getUpdatedat());
                         productImageRepository.save(image); // 保存圖片
+                        System.out.println("新增"+imageDTO.getImageid());
+
+
+                        System.out.println("PRIMARay " + imageDTO.getIsprimary());
                     }
                 }
             }
         }
 
         return existingProduct;
+    }
+
+    public void deleteProductById(Integer productid) {
+        // 1. 先確認商品是否存在
+        Product existingProduct = productRepository.findById(productid)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productid));
+
+        // 2. 先刪所有關聯的圖
+        List<ProductImage> images = productImageRepository.findAllByProduct_Productid(productid);
+        if (!images.isEmpty()) {
+            productImageRepository.deleteAll(images);
+            System.out.println("刪除圖片數量: " + images.size());
+        }
+
+        // 3. 再刪所有關聯的顏色
+        List<ProductColor> colors = productColorRepository.findByProduct_Productid(productid);
+        if (!colors.isEmpty()) {
+            productColorRepository.deleteAll(colors);
+            System.out.println("刪除顏色數量: " + colors.size());
+        }
+
+        // 4. 最後刪除商品本身
+        productRepository.deleteById(productid);
+        System.out.println("刪除商品 ID: " + productid);
+    }
+
+    public void deleteProductColorById(Integer colorId) {
+        // 1. 先確認顏色是否存在
+        ProductColor existingColor = productColorRepository.findById(colorId)
+                .orElseThrow(() -> new RuntimeException("ProductColor not found with id: " + colorId));
+
+        // 2. 先刪除該顏色的所有關聯圖片
+        List<ProductImage> images = productImageRepository.findAllByProductColor_Colorsid(colorId);
+        if (!images.isEmpty()) {
+            productImageRepository.deleteAll(images);
+            System.out.println("刪除圖片數量: " + images.size());
+        }
+
+        // 3. 最後刪除顏色
+        productColorRepository.deleteById(colorId);
+        System.out.println("刪除顏色 ID: " + colorId);
     }
 }

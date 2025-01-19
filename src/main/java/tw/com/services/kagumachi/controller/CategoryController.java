@@ -9,7 +9,9 @@ import tw.com.services.kagumachi.model.MainCategory;
 import tw.com.services.kagumachi.model.SubCategory;
 import tw.com.services.kagumachi.service.CategoryService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/Category")
@@ -54,17 +56,22 @@ public class CategoryController {
     }
 
     @PostMapping("/addMain")
-    public void addMainCategory(@RequestBody MainCategory mainCategory) {
-        System.out.println("收到請求: " + mainCategory.getCategoryname() + " | 狀態: " + mainCategory.getStatus());
+    public ResponseEntity<Map<String, Object>> addMainCategory(@RequestBody MainCategory mainCategory) {
         categoryService.addMainCategory(mainCategory);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Category added successfully");
+        response.put("category", mainCategory);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/addSub")
-    public ResponseEntity<String> addSubCategory(@RequestBody SubCategory subCategory) {
+    public ResponseEntity<?> addSubCategory(@RequestBody SubCategory subCategory) {
         if (subCategory.getMainCategory() == null) {
             return ResponseEntity.badRequest().body("錯誤：必須提供主分類");
         }
-        categoryService.addSubCategory(subCategory, subCategory.getMainCategory());
-        return ResponseEntity.ok("子分類新增成功");
+        SubCategory savedSubCategory = categoryService.addSubCategory(subCategory, subCategory.getMainCategory());
+        return ResponseEntity.ok(savedSubCategory);
     }
 }
