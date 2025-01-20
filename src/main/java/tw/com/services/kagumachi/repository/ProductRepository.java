@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-	//by大瑋
+	
 	List<Product> findByProductnameContaining(String productname);
 
     @EntityGraph(attributePaths = {"mainCategory", "subCategory", "supplier"})
@@ -28,6 +28,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("productname") String productname,
             @Param("maincategoryid") Integer maincategoryid,
             @Param("subcategoryid") Integer subcategoryid);
-
+    
+    @Query("SELECT p FROM Product p WHERE p.mainCategory.id = :maincategoryid AND p.subCategory.id = :subcategoryid")
+    List<Product> findByCategory(@Param("maincategoryid") int maincategoryid, @Param("subcategoryid") int subcategoryid);
 
 }

@@ -1,5 +1,9 @@
 package tw.com.services.kagumachi.controller;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> eb2fcfd6af9a9a187f9069324e4ed9e47e23fc85
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,25 +56,41 @@ public class HomePageController {
 //		for(ProductColor productcolor : productcolors) {
 //			System.out.println(productcolor.getColorname());
 //		}
-//		System.out.println(productlist.size());//6
-		
-//		int productid = 2;	
-//		
+
 		JSONArray jsonarray = new JSONArray();
 		for(int i=0;i<productlist.size();i++) {
 			Product product = productlist.get(i).get();
 			JSONObject jsonobject = new JSONObject();
+			jsonobject.put("productid",product.getProductid());
 			jsonobject.put("dataname", product.getProductname());
 			
 			int productid = product.getProductid();
+//			List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);		
+//			int colorsid = productcolors.get(0).getColorsid();
+//			Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);//與color資料表連接
+//			String imgurl = productImage.get().getImageurl();
+//			jsonobject.put("dataimage", imgurl);
+			
 			List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);
-			int colorsid = productcolors.get(0).getColorsid();
-			
-			Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);//與color資料表連接
-			String imgurl = productImage.get().getImageurl();
-			jsonobject.put("dataimage", imgurl);
-			jsonobject.put("dataprice", product.getDiscountprice());
-			
+            JSONArray productdetails = new JSONArray();
+            for (ProductColor productcolor : productcolors) {
+                JSONObject productdetail = new JSONObject();
+//                productdetail.put("color", productcolor.getColorname());
+                int colorsid = productcolor.getColorsid();
+                List<ProductImage> productImage = productImageRepository.findAllByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
+                String imageUrl = productImage.stream()
+                        .findFirst()
+                        .map(ProductImage::getImageurl)
+                        .orElse(""); // 如果沒有圖片，返回空字串
+
+                productdetail.put("dataimage", imageUrl);
+                productdetails.put(productdetail);
+            }
+            
+            jsonobject.put("productdetails", productdetails);	
+			jsonobject.put("discountprice", product.getDiscountprice());
+//			jsonobject.put("unitprice", product.getUnitprice());
+
 			jsonarray.put(jsonobject);
 		}
 		return jsonarray.toString();
@@ -82,22 +102,6 @@ public class HomePageController {
 //		String imgurl = productImage.get().getImageurl();
 //		System.out.println(imgurl);	
 	
-		
-		
-	
-		//一個產品多張圖片
-//		for (int i = 0; i < productcolors.size(); i++) {
-//		    int colorsid = productcolors.get(i).getColorsid();
-//		    Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
-//		    
-//		    if (productImage.isPresent()) {
-//		        String imgur                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      l = productImage.get().getImageurl();
-//		        System.out.println(imgurl);
-//		    } else {
-//		        System.out.println("Image not found for colorsid: " + colorsid);
-//		    }
-//		}
-		
 //		for(int i=1;i<=6;i++) {
 //			System.out.println(productlist.get(i-1).get().getDiscountprice());
 //			System.out.println(productlist.get(i-1).get().getUnitprice());
