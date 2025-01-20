@@ -23,6 +23,7 @@ public class ShipOrderController {
         List<Order> orders = orderRepository.findAll();
         for (Order order : orders) {
             JSONObject jsonObject = new JSONObject();
+            jsonObject.put("orderid", order.getOrderid());
             jsonObject.put("orderNumber", order.getOrderserial());
             String comname = order.getLogistics().getComname();
             jsonObject.put("logisticsCompany", comname);
