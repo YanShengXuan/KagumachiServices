@@ -17,6 +17,10 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "productid")
     private Product product;
+    
+    @ManyToOne
+    @JoinColumn(name = "colorsid")
+    private ProductColor productColor;
 
     private Integer quantity;
 
@@ -51,4 +55,13 @@ public class OrderDetail {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+
+	public ProductColor getProductColor() {
+		return productColor;
+	}
+
+	public void setProductColor(ProductColor productColor) {
+		this.productColor = productColor;
+	}
+    
 }
