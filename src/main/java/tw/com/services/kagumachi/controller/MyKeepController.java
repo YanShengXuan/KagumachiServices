@@ -51,19 +51,22 @@ public class MyKeepController {
             jsonObject.put("width", myKeep.getProduct().getWidth());
             jsonObject.put("depth", myKeep.getProduct().getDepth());
             jsonObject.put("height", myKeep.getProduct().getHeight());
-            // producklink還不知怎給，先不給。
             jsonObject.put("discountprice", myKeep.getProduct().getDiscountprice());
 
             List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);
             JSONArray productdetails = new JSONArray();
-            for(int i = 0; i < productcolors.size(); i++) {
-                ProductColor productcolor = productcolors.get(i);
+            for (ProductColor productcolor : productcolors) {
                 JSONObject productdetail = new JSONObject();
                 productdetail.put("color", productcolor.getColorname());
                 productdetail.put("qty", productcolor.getStock());
                 int colorsid = productcolor.getColorsid();
-                Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
-                productdetail.put("imgsrc", productImage.isPresent() ? productImage.get().getImageurl() : "");
+                List<ProductImage> productImage = productImageRepository.findAllByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
+                String imageUrl = productImage.stream()
+                        .findFirst()
+                        .map(ProductImage::getImageurl)
+                        .orElse(""); // 如果沒有圖片，返回空字串
+
+                productdetail.put("imgsrc", imageUrl);
                 productdetails.put(productdetail);
             }
             jsonObject.put("productdetails", productdetails);

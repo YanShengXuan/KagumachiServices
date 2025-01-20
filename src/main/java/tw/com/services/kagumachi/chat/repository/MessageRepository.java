@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findBySenderidAndReceiverid(Long senderid, Long receiverid);
+
+    List<Message> findBySenderidOrReceiverid(Long userId, Long userId1);
+
+    List<Message> findByReceiveridAndIsbackread(Long receiverid, boolean isbackread);
 }

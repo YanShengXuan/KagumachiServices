@@ -183,7 +183,7 @@ public class Product {
 
 
 
-//    @OneToMany(mappedBy = "product")
+//  @OneToMany(mappedBy = "product")
 //	@JsonBackReference
 //	private List<Cart> cart;
 //    public List<Cart> getCart() {

@@ -2,6 +2,7 @@ package tw.com.services.kagumachi.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -17,19 +18,20 @@ public class Order {
     private Member member;
 
     private String orderstatus;
-    private Integer paymentmethodid;
-    private Integer shippingmethodid;
+    private String paymentmethod;
+    private String shippingmethod;
     private String ordercity;
-    private Date orderdate;
-    private Date deliverydate;
+    private LocalDate orderdate;
+    private LocalDate deliverydate;
     private Double totalprice;
+    private String orderserial;
 
     @ManyToOne
     @JoinColumn(name = "logisticsid")
     private Logistics logistics;
 
     private String logisticsnumber;
-    private Date estimateddeliverydate;
+    private LocalDate estimateddeliverydate;
 
     public Integer getOrderid() {
         return orderid;
@@ -55,20 +57,20 @@ public class Order {
         this.orderstatus = orderstatus;
     }
 
-    public Integer getPaymentmethodid() {
-        return paymentmethodid;
+    public String getPaymentmethod() {
+        return paymentmethod;
     }
 
-    public void setPaymentmethodid(Integer paymentmethodid) {
-        this.paymentmethodid = paymentmethodid;
+    public void setPaymentmethod(String paymentmethod) {
+        this.paymentmethod = paymentmethod;
     }
 
-    public Integer getShippingmethodid() {
-        return shippingmethodid;
+    public String getShippingmethod() {
+        return shippingmethod;
     }
 
-    public void setShippingmethodid(Integer shippingmethodid) {
-        this.shippingmethodid = shippingmethodid;
+    public void setShippingmethod(String shippingmethod) {
+        this.shippingmethod = shippingmethod;
     }
 
     public String getOrdercity() {
@@ -79,19 +81,19 @@ public class Order {
         this.ordercity = ordercity;
     }
 
-    public Date getOrderdate() {
+    public LocalDate getOrderdate() {
         return orderdate;
     }
 
-    public void setOrderdate(Date orderdate) {
+    public void setOrderdate(LocalDate orderdate) {
         this.orderdate = orderdate;
     }
 
-    public Date getDeliverydate() {
+    public LocalDate getDeliverydate() {
         return deliverydate;
     }
 
-    public void setDeliverydate(Date deliverydate) {
+    public void setDeliverydate(LocalDate deliverydate) {
         this.deliverydate = deliverydate;
     }
 
@@ -119,11 +121,20 @@ public class Order {
         this.logisticsnumber = logisticsnumber;
     }
 
-    public Date getEstimateddeliverydate() {
+    public LocalDate getEstimateddeliverydate() {
         return estimateddeliverydate;
     }
 
-    public void setEstimateddeliverydate(Date estimateddeliverydate) {
+    public void setEstimateddeliverydate(LocalDate estimateddeliverydate) {
         this.estimateddeliverydate = estimateddeliverydate;
     }
+
+    public String getOrderserial() {
+		return orderserial;
+	}
+
+	public void setOrderserial(String orderserial) {
+		this.orderserial = orderserial;
+	}
+    
 }

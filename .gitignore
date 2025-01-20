@@ -3,6 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+application.properties
+.properties
 
 ### STS ###
 .apt_generated
@@ -36,3 +38,9 @@ build/
 備忘.txt
 
 .DS_Store
+
+# 忽略 application.properties
+#src/main/resources/application.properties
+
+# 忽略 Firebase 服務帳戶憑證
+src/main/resources/firebase-service-account.json

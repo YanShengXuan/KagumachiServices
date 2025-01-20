@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tw.com.services.kagumachi.dto.CartDto;
 import tw.com.services.kagumachi.model.Cart;
+import tw.com.services.kagumachi.model.ProductImage;
 import tw.com.services.kagumachi.repository.CartRepository;
+import tw.com.services.kagumachi.repository.ProductImageRepository;
+import tw.com.services.kagumachi.service.CartService;
 
 @RestController
 @RequestMapping("/shoppingcart")
@@ -19,10 +23,16 @@ public class CartController {
 	
 	@Autowired
 	CartRepository cartRepository;
-
+	
+	@Autowired
+	CartService cartService;
+	
+	@Autowired
+	ProductImageRepository productImageRepository;
+	
 	@GetMapping("/step1/{memberid}")
-	public List<Cart> carts(@PathVariable Integer memberid) {
-		return cartRepository.findByMember_Memberid(memberid);
+	public List<CartDto> carts(@PathVariable Integer memberid) {
+		return cartService.getCartAndImg(memberid);
 	}
 
 	@PostMapping("/step1/add/{cartid}")
