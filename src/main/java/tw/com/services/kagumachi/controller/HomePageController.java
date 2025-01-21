@@ -13,11 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import tw.com.services.kagumachi.model.MyKeep;
 import tw.com.services.kagumachi.model.Product;
 import tw.com.services.kagumachi.model.ProductColor;
 import tw.com.services.kagumachi.model.ProductImage;
+import tw.com.services.kagumachi.repository.MyKeepRepository;
 import tw.com.services.kagumachi.repository.ProductColorRepository;
 import tw.com.services.kagumachi.repository.ProductImageRepository;
 import tw.com.services.kagumachi.repository.ProductRepository;
@@ -26,6 +29,9 @@ import tw.com.services.kagumachi.service.ProductService;
 @RestController
 @RequestMapping("/myhome")
 public class HomePageController {
+	
+	@Autowired
+    private MyKeepRepository myKeepRepository;
 	
 	@Autowired
     private ProductRepository productrepository;
@@ -44,14 +50,6 @@ public class HomePageController {
 		for(int i=1;i<=6;i++) {
 			productlist.add(productrepository.findById(i));
 		}
-//		for(int i=1;i<=6;i++) {
-//			System.out.println(productlist.get(i-1).get().getProductname());
-//		}
-		
-//		List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productlist.get(1).get().getProductid());
-//		for(ProductColor productcolor : productcolors) {
-//			System.out.println(productcolor.getColorname());
-//		}
 
 		JSONArray jsonarray = new JSONArray();
 		for(int i=0;i<productlist.size();i++) {
@@ -85,25 +83,23 @@ public class HomePageController {
             
             jsonobject.put("productdetails", productdetails);	
 			jsonobject.put("discountprice", product.getDiscountprice());
-//			jsonobject.put("unitprice", product.getUnitprice());
+			jsonobject.put("unitprice", product.getUnitprice());
 
 			jsonarray.put(jsonobject);
 		}
 		return jsonarray.toString();
-		
-//		int productid = productlist.get(0).get().getProductid();
-//		System.out.println(productid);
-//		int colorsid = productcolors.get(0).getColorsid();
-//		Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);//與color資料表連接
-//		String imgurl = productImage.get().getImageurl();
-//		System.out.println(imgurl);	
-	
-//		for(int i=1;i<=6;i++) {
-//			System.out.println(productlist.get(i-1).get().getDiscountprice());
-//			System.out.println(productlist.get(i-1).get().getUnitprice());
-//		}
-		
 
 	}
-
+	@GetMapping("/testm")
+    public String getAllMyKeeps(@RequestParam Integer memberid) {
+		List<MyKeep> myKeepsList = myKeepRepository.findByMember_Memberid(memberid);
+		JSONArray jsonArray = new JSONArray();
+		for (MyKeep myKeep : myKeepsList) {
+            int productid = myKeep.getProduct().getProductid();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("productid", productid);
+            jsonArray.put(jsonObject);
+		}
+		return jsonArray.toString();
+    }
 }

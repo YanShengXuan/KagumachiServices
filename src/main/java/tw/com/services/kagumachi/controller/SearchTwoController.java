@@ -44,9 +44,9 @@ public class SearchTwoController {
 	            JSONObject jsonObject = new JSONObject();
 	            jsonObject.put("count", list.size());
 	            jsonObject.put("productid", product.getProductid()); 
-	            jsonObject.put("productname", product.getProductname()); 
+	            jsonObject.put("dataname", product.getProductname()); 
 	            jsonObject.put("discountprice", product.getDiscountprice());
-//				jsonObject.put("unitprice", product.getUnitprice());
+				jsonObject.put("unitprice", product.getUnitprice());
 	            
 	            int productid = product.getProductid();
 				List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);
@@ -89,9 +89,9 @@ public class SearchTwoController {
 	            JSONObject jsonObject = new JSONObject();
 	            jsonObject.put("count", list.size());
 	            jsonObject.put("productid", product.getProductid()); 
-	            jsonObject.put("productname", product.getProductname()); 
+	            jsonObject.put("dataname", product.getProductname()); 
 	            jsonObject.put("discountprice", product.getDiscountprice());
-//				jsonObject.put("unitprice", product.getUnitprice());
+				jsonObject.put("unitprice", product.getUnitprice());
 	            
 	            int productid = product.getProductid();
 				List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);
