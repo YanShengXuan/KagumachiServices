@@ -6,6 +6,7 @@ public class OrderDetailsDto {
 	private String colorname;
 	private Integer price;
 	private Integer quantity;
+	private String imageurl;
 	
 	public Integer getOrderdetailid() {
 		return orderdetailid;
@@ -37,7 +38,11 @@ public class OrderDetailsDto {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-	
-	
+	public String getImageurl() {
+		return imageurl;
+	}
+	public void setImageurl(String imageurl) {
+		this.imageurl = imageurl;
+	}
 	
 }
