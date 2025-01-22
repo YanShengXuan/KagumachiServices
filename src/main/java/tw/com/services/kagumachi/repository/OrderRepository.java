@@ -26,4 +26,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByDateBetweenOrderstatus(@Param("startDate") LocalDate startDate,
 			@Param("endDate") LocalDate endDate);
     
+    @Query("SELECT o.orderid FROM Order o WHERE o.orderserial = :orderSerial")
+    Integer findByOrderserial(@Param("orderSerial") String orderSerial);
 }

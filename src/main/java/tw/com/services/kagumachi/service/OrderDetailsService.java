@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +21,21 @@ import tw.com.services.kagumachi.model.OrderDetail;
 import tw.com.services.kagumachi.repository.OrderDetailRepository;
 import tw.com.services.kagumachi.repository.OrderRepository;
 import tw.com.services.kagumachi.repository.ProductColorRepository;
+import tw.com.services.kagumachi.repository.ProductImageRepository;
 
 @Service
 public class OrderDetailsService {
-	@Autowired
-	OrderRepository orderRepository;
-	
 	@Autowired
 	OrderDetailRepository orderDetailRepository;
 	
 	@Autowired
 	ProductColorRepository productColorRepository;
+	
+	@Autowired
+	OrderService orderService;
+	
+	@Autowired
+	ProductImageRepository productImageRepository;
 	
 	public List<OrderDetailsDto> getDetails(@Param("orderId") Integer orderId){
 		List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_Orderid(orderId);
@@ -84,6 +89,31 @@ public class OrderDetailsService {
 		List<OrderAllMonthDto> result = mapData.entrySet().stream()
 				.map(data -> new OrderAllMonthDto(data.getKey(), data.getValue()))
 				.collect(Collectors.toList());
+		return result;
+	}
+	
+	public List<OrderDetailsDto> getDetailsByOrderserial(String orderSerial){
+		Integer orderId = orderService.getOrderIdbyOrderserial(orderSerial);
+		List<OrderDetail> orderdetails = orderDetailRepository.findByOrder_Orderid(orderId);
+
+		List<OrderDetailsDto> result = new ArrayList<OrderDetailsDto>();
+		for (OrderDetail orderdetail : orderdetails) {
+			OrderDetailsDto dto = new OrderDetailsDto();
+			int unitprice = orderdetail.getProduct().getUnitprice();
+			int discountprice = orderdetail.getProduct().getDiscountprice() != null ? orderdetail.getProduct().getDiscountprice() : 0;
+			dto.setOrderdetailid(orderdetail.getOrderdetailid());
+			dto.setProductname(orderdetail.getProduct().getProductname());
+			dto.setColorname(orderdetail.getProductColor().getColorname());
+			dto.setPrice(discountprice > 0 ? discountprice : unitprice);
+			dto.setQuantity(orderdetail.getQuantity());
+			
+			Integer productId = orderdetail.getProduct().getProductid();
+			Optional<String> imageUrl = productImageRepository.findImageUrlsByProductId(productId);
+
+			dto.setImageurl(imageUrl.orElseThrow(() -> 
+            new IllegalStateException("商品 ID " + orderdetail.getProduct().getProductid() + " 找不到主圖片")));
+			result.add(dto);
+		}
 		return result;
 	}
 

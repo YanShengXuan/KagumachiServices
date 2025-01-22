@@ -68,7 +68,7 @@ public class SearchOneController {
             
             jsonobject.put("productdetails", productdetails);	
             jsonobject.put("discountprice", product.getDiscountprice());
-//			jsonobject.put("unitprice", product.getUnitprice());
+			jsonobject.put("unitprice", product.getUnitprice());
 
 			jsonarray.put(jsonobject);
 			}
@@ -92,15 +92,29 @@ public class SearchOneController {
 			if(product.getDiscountprice()<= pri) {
 				JSONObject jsonobject = new JSONObject();
 				jsonobject.put("count", count);
+				jsonobject.put("productid",product.getProductid());
 				jsonobject.put("dataname", product.getProductname());
 				
 				int productid = product.getProductid();
-				List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);   
-	            int colorsid = productcolors.get(0).getColorsid();
-	            Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);//與color資料表連接
-	            String imgurl = productImage.get().getImageurl();
-				jsonobject.put("dataimage", imgurl);
-				jsonobject.put("dataprice", product.getDiscountprice());
+				List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);
+	            JSONArray productdetails = new JSONArray();
+	            for (ProductColor productcolor : productcolors) {
+	                JSONObject productdetail = new JSONObject();
+//	                productdetail.put("color", productcolor.getColorname());
+	                int colorsid = productcolor.getColorsid();
+	                List<ProductImage> productImage = productImageRepository.findAllByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
+	                String imageUrl = productImage.stream()
+	                        .findFirst()
+	                        .map(ProductImage::getImageurl)
+	                        .orElse(""); // 如果沒有圖片，返回空字串
+
+	                productdetail.put("dataimage", imageUrl);
+	                productdetails.put(productdetail);
+	            }
+	            
+	            jsonobject.put("productdetails", productdetails);	
+	            jsonobject.put("discountprice", product.getDiscountprice());
+				jsonobject.put("unitprice", product.getUnitprice());
 				
 				jsonarray.put(jsonobject);	
 				}
