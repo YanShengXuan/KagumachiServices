@@ -3,11 +3,11 @@ package tw.com.services.kagumachi.controller;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,10 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 import tw.com.services.kagumachi.model.MainCategory;
 import tw.com.services.kagumachi.model.Member;
 import tw.com.services.kagumachi.model.OrderDetail;
+import tw.com.services.kagumachi.model.ProductColor;
+import tw.com.services.kagumachi.model.Sales;
+import tw.com.services.kagumachi.model.Suppliers;
 import tw.com.services.kagumachi.repository.MainCategoryRepository;
 import tw.com.services.kagumachi.repository.MemberRepository;
 import tw.com.services.kagumachi.repository.OrderDetailRepository;
 import tw.com.services.kagumachi.repository.OrderRepository;
+import tw.com.services.kagumachi.repository.ProductColorRepository;
+import tw.com.services.kagumachi.repository.SalesRepository;
+import tw.com.services.kagumachi.repository.SuppliersRepository;
 
 @RestController
 @RequestMapping("/myback")
@@ -39,7 +45,16 @@ public class BackHomeController {
 	
 	@Autowired
 	private MainCategoryRepository  mainCategoryRepository;
+	
+	@Autowired
+	private SuppliersRepository suppliersRepository;
 
+	@Autowired
+	private ProductColorRepository productColorRepository;
+	
+	@Autowired
+	private SalesRepository salesRepository;
+	
 	@GetMapping()
 	public String getproduct() {
         List<OrderDetail> orderDetails = orderDetailRepository.findAll();
@@ -68,7 +83,7 @@ public class BackHomeController {
     }
 
 	
-	@GetMapping("/test")
+	@GetMapping("/member")
 	public String getMember() {
 	    List<Member> members = memberRepository.findAll();
 	    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -129,6 +144,51 @@ public class BackHomeController {
 
 	    return result.toString(); // 返回 JSON 字符串
 	}
-	
+	@GetMapping("/getstock")
+    public String getStock() {
+        List<Suppliers> suppliers = suppliersRepository.findAll();
+        List<ProductColor> productColors = productColorRepository.findAll();
+        JSONArray combinedJsonArray = new JSONArray();
 
+        for (Suppliers supplier : suppliers) {
+            for (ProductColor productColor : productColors) {
+                JSONObject combinedJson = new JSONObject();
+                
+                // 添加 suppliers 表的数据
+                combinedJson.put("supplierid", supplier.getSupplierid());
+                combinedJson.put("phone", supplier.getPhone());
+                
+                // 添加 productcolors 表的数据
+                combinedJson.put("productid", productColor.getProduct().getProductid());
+                combinedJson.put("stock", productColor.getStock());
+                combinedJson.put("minstock", productColor.getMinstock());
+                
+                combinedJsonArray.put(combinedJson);
+            }
+        }
+
+        return combinedJsonArray.toString(); 
+    }
+	@GetMapping("/getsales")
+    public String getSales() {
+		 List<MainCategory> maincategorys = mainCategoryRepository.findAll();
+		 List<Sales> sales = salesRepository.findAll();
+		 JSONArray jsonArray = new JSONArray();
+		 Set<String> uniqueEntries = new HashSet<>();
+		 
+		 for(MainCategory maincategory : maincategorys) {
+			 if(maincategory.getSales().getSalesid()!=1) {
+				 JSONObject jsonObject = new JSONObject();
+				 jsonObject.put("salesid",maincategory.getSales().getSalesid());
+				 jsonObject.put("categoryname",maincategory.getCategoryname());				 
+				 for(Sales sale : sales) {
+					 if(maincategory.getSales().getSalesid() == sale.getSalesid()) {
+						 jsonObject.put("salesdesc",sale.getSalesdesc()); 
+						 jsonArray.put(jsonObject);	
+					 }
+				 }
+			 }
+		 }
+		 return jsonArray.toString();
+	}
 }
