@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tw.com.services.kagumachi.dto.OrderAllMonthDto;
 import tw.com.services.kagumachi.dto.OrderDetailsDto;
 import tw.com.services.kagumachi.dto.OrderDto;
+import tw.com.services.kagumachi.dto.OrderSeasonDto;
 import tw.com.services.kagumachi.model.Order;
-import tw.com.services.kagumachi.model.OrderDetail;
+import tw.com.services.kagumachi.model.SubCategory;
 import tw.com.services.kagumachi.repository.OrderDetailRepository;
 import tw.com.services.kagumachi.repository.OrderRepository;
+import tw.com.services.kagumachi.repository.SubCategoryRepository;
 import tw.com.services.kagumachi.service.OrderDetailsService;
 
 @RestController
@@ -28,11 +31,22 @@ public class OrderController {
 	OrderRepository orderRepository;
 	
 	@Autowired
+	OrderDetailRepository orderDetailRepository;
+	
+	@Autowired
 	OrderDetailsService orderDetailsService;
+	
+	@Autowired
+	SubCategoryRepository subCategoryRepository;
 	
 	@GetMapping("/test")
 	public List<Order> test(){
 		return orderRepository.findAll();
+	}
+	
+	@GetMapping("/member/{orderid}")
+	public List<Order> member(@PathVariable Integer orderid){
+		return orderRepository.findAllById(Collections.singletonList(orderid));
 	}
 	
 	@PostMapping("/between")
@@ -55,6 +69,19 @@ public class OrderController {
 		return orderDetailsService.getDetails(orderid);
 	}
 	
+	@GetMapping("/allSubCategory")
+	public List<SubCategory> allsubCategory(){
+		return subCategoryRepository.findAll();
+	}
 	
+	@GetMapping("/orderSeason/{startDate}/{endDate}")
+	public List<OrderSeasonDto> getOrderSeason(@PathVariable LocalDate startDate,
+			@PathVariable LocalDate endDate){
+		return orderDetailsService.getSeasonQuantity(startDate, endDate);
+	}
 	
+	@GetMapping("/orderAllMonth/{year}")
+	public List<OrderAllMonthDto> getOrderAllMonth(@PathVariable Integer year){
+		return orderDetailsService.getAllMonthQuantity(year);
+	}
 }
