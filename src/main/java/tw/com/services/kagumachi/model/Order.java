@@ -177,5 +177,13 @@ public class Order {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
+	
+	// 處理NULL值
+	@Override
+	public String toString() {
+	    return "Order{" +
+	            "orderstatus=" + orderstatus +
+	            ", totalprice=" + totalprice +
+	            "}";
+	}
 }
