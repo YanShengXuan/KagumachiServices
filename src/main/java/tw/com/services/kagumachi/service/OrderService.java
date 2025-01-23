@@ -20,16 +20,25 @@ public class OrderService {
 		return orderRepository.findByOrderserial(orderSerial);
 	}
 	
-	public void createOrder(Integer memberid, Order order) {
+	
+	public Integer createOrderAndReturnId(Integer memberid, Order order) {
         // 設定訂單日期
         order.setOrderdate(LocalDate.now());
         
+        // 綁訂會員
         Member member = new Member();
         member.setMemberid(memberid);
         order.setMember(member);
         
+        // 物流日期
+        LocalDate estimateddeliverydate = order.getEstimateddeliverydate(); // 到貨日期
+        order.setDeliverydate(estimateddeliverydate.plusDays(-1L)); // 出貨日期
+        
         // 保存訂單到資料庫
         orderRepository.save(order);
+        
+        // 返回生成的 orderId
+        return order.getOrderid();
     }
 
 }

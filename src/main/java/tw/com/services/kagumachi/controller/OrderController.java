@@ -56,14 +56,15 @@ public class OrderController {
 	}
 	
 	@PostMapping("/{memberid}")
-    public String createOrder(@PathVariable Integer memberid, @RequestBody Order order) {
-        try {
-        	System.out.println(order);
-            orderService.createOrder(memberid, order);
-            return "Order created successfully";
-        } catch (Exception e) {
-        	return "Failed to create order";
-        }
+    public Integer createOrder(@PathVariable Integer memberid, @RequestBody Order order) {
+		 try {
+		        // 呼叫 Service 保存訂單並返回 orderId
+		        Integer orderId = orderService.createOrderAndReturnId(memberid, order);
+		        return orderId; // 返回 orderId
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        return null; // 若出現錯誤返回 null 或其他適合的錯誤代碼
+		    }
     }
 
 	

@@ -2,6 +2,7 @@ package tw.com.services.kagumachi.service;
 
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,22 +29,27 @@ public class OrderSummaryService {
 		int itemsCount = 0; // 總商品數量
 		int totalPrice = 0; // 折扣後的商品總價
 		int shippingFee = 0; // 預設運費
+		
+		JSONArray itemDetails = new JSONArray(); // 存放商品詳細資訊
 
 		for (Cart cart : carts) {
-			Product product = cart.getProduct();
-			int quantity = cart.getQuantity();
+			Product product = cart.getProduct(); // 各商品
+			int quantity = cart.getQuantity(); // 各商品的數量
 
-			// 確保價格數據有效（避免 null）
 			Integer discountPrice = product.getDiscountprice();
-//			Integer unitPrice = product.getUnitprice();
 
-			// 計算總數量和總價
 			itemsCount += quantity; // 總商品數量
 			totalPrice += discountPrice * quantity; // 折扣後的商品總價
+			
+			// 加入訂單詳細資訊
+            JSONObject itemDetail = new JSONObject();
+            itemDetail.put("productId", product.getProductid());
+            itemDetail.put("colorsId", cart.getProductColor().getColorsid());
+            itemDetail.put("quantity", quantity);
+            itemDetails.put(itemDetail);
 		}
 
-		// 計算總應付金額
-		int payableAmount = totalPrice + shippingFee;
+		int payableAmount = totalPrice + shippingFee; // 計算總應付金額
 
 		// 返回結果
 		JSONObject summary = new JSONObject();
@@ -51,6 +57,7 @@ public class OrderSummaryService {
 		summary.put("totalPrice", totalPrice);
 		summary.put("shippingFee", shipRateRepository.findAll()); // 在前端抓取運費費率
 		summary.put("payableAmount", payableAmount); // 總應付金額	
+		summary.put("itemDetails", itemDetails); // 加入訂單詳細資訊
 
 		return summary;
 	}
