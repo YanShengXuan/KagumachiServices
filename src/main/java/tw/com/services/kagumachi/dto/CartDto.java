@@ -9,6 +9,11 @@ public class CartDto {
 	private Integer unitprice;
 	private String imageurl;
     private Boolean ispurchase;
+    private Double width;
+    private Double height;
+    private Double depth;
+    private Integer discountprice;
+    private String salesname;
 	public Integer getCartsid() {
 		return cartsid;
 	}
@@ -51,6 +56,36 @@ public class CartDto {
 	public void setIspurchase(Boolean ispurchase) {
 		this.ispurchase = ispurchase;
 	}
-    
-    
+	public Double getWidth() {
+		return width;
+	}
+	public void setWidth(Double width) {
+		this.width = width;
+	}
+	public Double getHeight() {
+		return height;
+	}
+	public void setHeight(Double height) {
+		this.height = height;
+	}
+	public Double getDepth() {
+		return depth;
+	}
+	public void setDepth(Double depth) {
+		this.depth = depth;
+	}
+	public Integer getDiscountprice() {
+		return discountprice;
+	}
+	public void setDiscountprice(Integer discountprice) {
+		this.discountprice = discountprice;
+	}
+	public String getSalesname() {
+		return salesname;
+	}
+	public void setSalesname(String salesname) {
+		this.salesname = salesname;
+	}
+	
+	
 }
