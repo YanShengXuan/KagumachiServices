@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,8 @@ import tw.com.services.kagumachi.repository.SuppliersRepository;
 import tw.com.services.kagumachi.service.SuppliersService;
 
 import org.springframework.web.bind.annotation.RequestParam;
-
+import tw.com.services.kagumachi.repository.SalesRepository;
+import tw.com.services.kagumachi.repository.SuppliersRepository;
 
 @RestController
 @RequestMapping("/myback")
@@ -62,11 +64,11 @@ public class BackHomeController {
 	
 	@Autowired
 	private SalesRepository salesRepository;
-	
+
 	@Autowired
 	private ProductRepository productRepository;
 	
-	
+
 	@GetMapping()
 	public String getproduct() {
         List<OrderDetail> orderDetails = orderDetailRepository.findAll();
@@ -186,7 +188,6 @@ public class BackHomeController {
 		 List<MainCategory> maincategorys = mainCategoryRepository.findAll();
 		 List<Sales> sales = salesRepository.findAll();
 		 JSONArray jsonArray = new JSONArray();
-		 Set<String> uniqueEntries = new HashSet<>();
 		 
 		 for(MainCategory maincategory : maincategorys) {
 			 if(maincategory.getSales().getSalesid()!=1) {
@@ -203,6 +204,7 @@ public class BackHomeController {
 		 }
 		 return jsonArray.toString();
 	}
+
 //	@GetMapping("/test")
 //	public void getQuantity() {
 //		List<OrderDetail> orderdetails = orderDetailRepository.findAll();
@@ -283,3 +285,6 @@ public class BackHomeController {
 	 		}
 	 		
 	}
+
+
+
