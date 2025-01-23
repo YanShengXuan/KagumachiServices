@@ -3,15 +3,17 @@ package tw.com.services.kagumachi.controller;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +21,22 @@ import org.springframework.web.bind.annotation.RestController;
 import tw.com.services.kagumachi.model.MainCategory;
 import tw.com.services.kagumachi.model.Member;
 import tw.com.services.kagumachi.model.OrderDetail;
+import tw.com.services.kagumachi.model.Product;
+import tw.com.services.kagumachi.model.ProductColor;
+import tw.com.services.kagumachi.model.Sales;
+import tw.com.services.kagumachi.model.Suppliers;
 import tw.com.services.kagumachi.repository.MainCategoryRepository;
 import tw.com.services.kagumachi.repository.MemberRepository;
 import tw.com.services.kagumachi.repository.OrderDetailRepository;
 import tw.com.services.kagumachi.repository.OrderRepository;
+import tw.com.services.kagumachi.repository.ProductColorRepository;
+import tw.com.services.kagumachi.repository.ProductRepository;
+import tw.com.services.kagumachi.repository.SalesRepository;
+import tw.com.services.kagumachi.repository.SuppliersRepository;
+import tw.com.services.kagumachi.service.SuppliersService;
+
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/myback")
@@ -39,7 +53,20 @@ public class BackHomeController {
 	
 	@Autowired
 	private MainCategoryRepository  mainCategoryRepository;
+	
+	@Autowired
+	private SuppliersRepository suppliersRepository;
 
+	@Autowired
+	private ProductColorRepository productColorRepository;
+	
+	@Autowired
+	private SalesRepository salesRepository;
+	
+	@Autowired
+	private ProductRepository productRepository;
+	
+	
 	@GetMapping()
 	public String getproduct() {
         List<OrderDetail> orderDetails = orderDetailRepository.findAll();
@@ -68,15 +95,15 @@ public class BackHomeController {
     }
 
 	
-	@GetMapping("/test")
+	@GetMapping("/member")
 	public String getMember() {
 	    List<Member> members = memberRepository.findAll();
 	    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-	    // 用来存储解析出的月份及其出现次数
+	    
 	    Map<Integer, Integer> monthCountMap = new HashMap<>();
 
-	    // 遍历成员，统计月份出现次数
+	    
 	    for (Member member : members) {
 	        String registrationDate = member.getRegistrationdate().toString();
 	        LocalDate date = LocalDate.parse(registrationDate, dateFormatter); // 使用 LocalDate 解析
@@ -129,6 +156,130 @@ public class BackHomeController {
 
 	    return result.toString(); // 返回 JSON 字符串
 	}
-	
+	@GetMapping("/getstock")
+    public String getStock() {
+        List<Suppliers> suppliers = suppliersRepository.findAll();
+        List<ProductColor> productColors = productColorRepository.findAll();
+        JSONArray combinedJsonArray = new JSONArray();
 
-}
+        for (Suppliers supplier : suppliers) {
+            for (ProductColor productColor : productColors) {
+                JSONObject combinedJson = new JSONObject();
+                
+                // 添加 suppliers 表的数据
+                combinedJson.put("supplierid", supplier.getSupplierid());
+                combinedJson.put("phone", supplier.getPhone());
+                
+                // 添加 productcolors 表的数据
+                combinedJson.put("productid", productColor.getProduct().getProductid());
+                combinedJson.put("stock", productColor.getStock());
+                combinedJson.put("minstock", productColor.getMinstock());
+                
+                combinedJsonArray.put(combinedJson);
+            }
+        }
+
+        return combinedJsonArray.toString(); 
+    }
+	@GetMapping("/getsales")
+    public String getSales() {
+		 List<MainCategory> maincategorys = mainCategoryRepository.findAll();
+		 List<Sales> sales = salesRepository.findAll();
+		 JSONArray jsonArray = new JSONArray();
+		 Set<String> uniqueEntries = new HashSet<>();
+		 
+		 for(MainCategory maincategory : maincategorys) {
+			 if(maincategory.getSales().getSalesid()!=1) {
+				 JSONObject jsonObject = new JSONObject();
+				 jsonObject.put("salesid",maincategory.getSales().getSalesid());
+				 jsonObject.put("categoryname",maincategory.getCategoryname());				 
+				 for(Sales sale : sales) {
+					 if(maincategory.getSales().getSalesid() == sale.getSalesid()) {
+						 jsonObject.put("salesdesc",sale.getSalesdesc()); 
+						 jsonArray.put(jsonObject);	
+					 }
+				 }
+			 }
+		 }
+		 return jsonArray.toString();
+	}
+//	@GetMapping("/test")
+//	public void getQuantity() {
+//		List<OrderDetail> orderdetails = orderDetailRepository.findAll();
+//		List<Product> products = productRepository.findAll();
+//		 Map<Integer, Integer> qMap = new HashMap<>();
+//		
+//		for(OrderDetail orderdetail:orderdetails) {
+//			//System.out.println(orderdetail.getProduct().getProductid());
+//			
+//			for(Product product:products) {
+//				if(product.getProductid()==orderdetail.getProduct().getProductid()) {
+////					System.out.println(product.getMainCategory().getMaincategoryid());
+//					qMap.put(product.getMainCategory().getMaincategoryid(), qMap.getOrDefault(product.getMainCategory().getMaincategoryid(), 0) + 1);
+//				}
+//			}
+//			
+//		}
+//		for (Map.Entry<Integer, Integer> entry : qMap.entrySet()) {
+//            System.out.println("數字 " + entry.getKey() + " 出現了 " + entry.getValue() + " 次");
+//        }
+//	}
+	 	@GetMapping("/quantity")
+	 	public ResponseEntity<Map<String, Integer>> getQuantity() {
+	        List<OrderDetail> orderdetails = orderDetailRepository.findAll();
+	        List<Product> products = productRepository.findAll();
+
+	        // 初始化 Map，確保 1 到 6 的值都存在，並預設為 0
+	        Map<Integer, Integer> qMap = new HashMap<>();
+	        for (int i = 1; i <= 6; i++) {
+	            qMap.put(i, 0);
+	        }
+
+	        // 統計出現次數
+	        for (OrderDetail orderdetail : orderdetails) {
+	            for (Product product : products) {
+	                if (product.getProductid().equals(orderdetail.getProduct().getProductid())) {
+	                    int mainCategoryId = product.getMainCategory().getMaincategoryid();
+	                    // 更新該主分類的出現次數
+	                    qMap.put(mainCategoryId, qMap.getOrDefault(mainCategoryId, 0) + 1);
+	                }
+	            }
+	        }
+	        Map<String, Integer> result = qMap.entrySet()
+	                .stream()
+	                .collect(Collectors.toMap(
+	                        entry -> String.valueOf(entry.getKey()), // 將鍵轉為字串
+	                        Map.Entry::getValue
+	                ));
+	        // 自動轉換 qMap 為 JSON 返回
+	        return ResponseEntity.ok(result);
+	    }
+	 	
+	 	@GetMapping("/test")
+	 	public String getallStock() {
+	 		List<ProductColor> productColors = productColorRepository.findAll();
+	 		List<Product> products = productRepository.findAll();
+	 		List<Suppliers> suppliers = suppliersRepository.findAll();
+	 		
+	 		JSONArray jsonArray = new JSONArray();
+	 		for(ProductColor productColor: productColors) {
+	 			if((productColor.getStock())-(productColor.getMinstock())<(productColor.getMinstock())) {
+	 				JSONObject jsonObject = new JSONObject();
+					jsonObject.put("productid",productColor.getProduct().getProductid());
+					jsonObject.put("colorsid ",productColor.getColorsid());
+					jsonObject.put("stock ",productColor.getStock());
+					jsonObject.put("minstock ",productColor.getStock()-productColor.getMinstock());
+					for(Product product:products) {
+						for(Suppliers supplier:suppliers) {
+							jsonObject.put("name",productColor.getProduct().getSupplier().getName());
+							jsonObject.put("phone",productColor.getProduct().getSupplier().getPhone());
+							}
+						}
+					jsonArray.put(jsonObject);	
+					}
+					
+	 			}
+	 			return jsonArray.toString();
+	 		}
+	 		
+	}
