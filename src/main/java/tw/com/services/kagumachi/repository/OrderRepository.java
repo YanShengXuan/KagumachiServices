@@ -9,6 +9,7 @@ import tw.com.services.kagumachi.model.Order;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
@@ -28,4 +29,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     
     @Query("SELECT o.orderid FROM Order o WHERE o.orderserial = :orderSerial")
     Integer findByOrderserial(@Param("orderSerial") String orderSerial);
+
+    //Emma
+    @Query("SELECT o FROM Order o WHERE o.member.memberid = :memberid ORDER BY o.orderdate DESC LIMIT 1")
+    Optional<Order> findLatestOrderByMemberId(Integer memberid);
 }
