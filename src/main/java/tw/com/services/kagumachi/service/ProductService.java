@@ -486,6 +486,38 @@ public class ProductService {
         dto.setReviewcount(product.getReviewcount());
         dto.setUpdateat(product.getUpdateat());
 
+        if (product.getMainCategory() != null) {
+            dto.setMaincategoryid(product.getMainCategory().getMaincategoryid()); // 設置主類別 ID
+
+            ProductDTO.MainCategoryDTO mainCategory = new ProductDTO.MainCategoryDTO();
+            mainCategory.setMaincategoryid(product.getMainCategory().getMaincategoryid());
+            mainCategory.setCategoryname(product.getMainCategory().getCategoryname());
+            mainCategory.setStatus(product.getMainCategory().getStatus());
+
+            // **處理 Sales (活動)**
+            if (product.getMainCategory().getSales() != null) {
+                Sales sales = product.getMainCategory().getSales();
+                ProductDTO.SalesDTO salesDTO = new ProductDTO.SalesDTO();
+                salesDTO.setSalesid(sales.getSalesid());
+                salesDTO.setName(sales.getName());
+                salesDTO.setSalesdesc(sales.getSalesdesc());
+                salesDTO.setDiscount(sales.getDiscount());
+
+                mainCategory.setSales(salesDTO);
+            }
+
+            dto.setMainCategory(mainCategory);
+        }
+
+        if (product.getSubCategory() != null) {
+            dto.setSubcategoryid(product.getSubCategory().getSubcategoryid()); // 設置副類別 ID
+            ProductDTO.SubCategoryDTO subCategory = new ProductDTO.SubCategoryDTO();
+            subCategory.setSubcategoryid(product.getSubCategory().getSubcategoryid());
+            subCategory.setCategoryname(product.getSubCategory().getCategoryname());
+            subCategory.setStatus(product.getSubCategory().getStatus());
+            dto.setSubCategory(subCategory);
+        }
+
 
         // 設置 ProductColors
         List<ProductColor> colors = productColorRepository.findByProduct_Productid(product.getProductid());
