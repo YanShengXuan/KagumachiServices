@@ -465,4 +465,55 @@ public class ProductService {
             return dto;
         }).collect(Collectors.toList());
     }
+
+    public ProductDTO getProductById(Integer productid) {
+        Product product = productRepository.findById(productid)
+                .orElseThrow(() -> new RuntimeException("找不到商品 ID: " + productid));
+
+        ProductDTO dto = new ProductDTO();
+        dto.setProductid(product.getProductid());
+        dto.setProductname(product.getProductname());
+        dto.setProductdescription(product.getProductdescription());
+        dto.setWidth(product.getWidth());
+        dto.setHeight(product.getHeight());
+        dto.setDepth(product.getDepth());
+        dto.setUnitprice(product.getUnitprice());
+        dto.setDiscountprice(product.getDiscountprice());
+        dto.setProductcost(product.getProductcost());
+        dto.setStatus(product.getStatus());
+        dto.setUnitsold(product.getUnitsold());
+        dto.setRating(product.getRating());
+        dto.setReviewcount(product.getReviewcount());
+        dto.setUpdateat(product.getUpdateat());
+
+
+        // 設置 ProductColors
+        List<ProductColor> colors = productColorRepository.findByProduct_Productid(product.getProductid());
+        List<ProductDTO.ProductColorDTO> colorDTOs = colors.stream().map(color -> {
+            ProductDTO.ProductColorDTO colorDTO = new ProductDTO.ProductColorDTO();
+            colorDTO.setColorsid(color.getColorsid());
+            colorDTO.setColorname(color.getColorname());
+            colorDTO.setStock(color.getStock());
+            colorDTO.setMinstock(color.getMinstock());
+            colorDTO.setUpdateat(color.getUpdateat());
+
+            // 查詢顏色相關的圖片
+            List<ProductImage> images = productImageRepository.findAllByProduct_ProductidAndProductColor_Colorsid(
+                    product.getProductid(), color.getColorsid());
+            List<ProductDTO.ProductImageDTO> imageDTOs = images.stream().map(image -> {
+                ProductDTO.ProductImageDTO imageDTO = new ProductDTO.ProductImageDTO();
+                imageDTO.setImageid(image.getImageid());
+                imageDTO.setImageurl(image.getImageurl());
+                imageDTO.setIsprimary(image.getIsprimary());
+                imageDTO.setUpdatedat(image.getUpdatedat());
+                return imageDTO;
+            }).collect(Collectors.toList());
+
+            colorDTO.setProductImages(imageDTOs);
+            return colorDTO;
+        }).collect(Collectors.toList());
+
+        dto.setProductColors(colorDTOs);
+        return dto;
+    }
 }
