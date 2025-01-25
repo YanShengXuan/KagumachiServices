@@ -115,6 +115,10 @@ public class ProductController {
         return productService.searchProducts(productname, maincategoryid, subcategoryid);
     }
 
-
+    @GetMapping("/{productid}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Integer productid) {
+        ProductDTO product = productService.getProductById(productid);
+        return ResponseEntity.ok(product);
+    }
 
 }

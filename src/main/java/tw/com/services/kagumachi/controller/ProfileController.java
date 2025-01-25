@@ -41,7 +41,13 @@ public class ProfileController {
     public String updateProfile(@RequestBody Map<String, Object> payload) {
         Integer memberid;
         try {
-            memberid = Integer.valueOf((String) payload.get("memberid"));
+            if (payload.get("memberid") instanceof Integer) {
+                memberid = (Integer) payload.get("memberid");
+            } else if (payload.get("memberid") instanceof String) {
+                memberid = Integer.valueOf((String) payload.get("memberid"));
+            } else {
+                return "Invalid member ID format";
+            }
         } catch (NumberFormatException e) {
             return "Invalid member ID format";
         }
