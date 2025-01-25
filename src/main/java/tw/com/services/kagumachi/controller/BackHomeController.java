@@ -242,7 +242,6 @@ public class BackHomeController {
 	            for (Product product : products) {
 	                if (product.getProductid().equals(orderdetail.getProduct().getProductid())) {
 	                    int mainCategoryId = product.getMainCategory().getMaincategoryid();
-	                    // 更新該主分類的出現次數
 	                    qMap.put(mainCategoryId, qMap.getOrDefault(mainCategoryId, 0) + 1);
 	                }
 	            }
@@ -268,9 +267,9 @@ public class BackHomeController {
 	 			if((productColor.getStock())-(productColor.getMinstock())<(productColor.getMinstock())) {
 	 				JSONObject jsonObject = new JSONObject();
 					jsonObject.put("productid",productColor.getProduct().getProductid());
-					jsonObject.put("colorsid ",productColor.getColorsid());
-					jsonObject.put("stock ",productColor.getStock());
-					jsonObject.put("minstock ",productColor.getStock()-productColor.getMinstock());
+					jsonObject.put("colorsid",productColor.getColorsid());
+					jsonObject.put("stock",productColor.getStock());
+					jsonObject.put("minstock",productColor.getStock()-productColor.getMinstock());
 					for(Product product:products) {
 						for(Suppliers supplier:suppliers) {
 							jsonObject.put("name",productColor.getProduct().getSupplier().getName());
