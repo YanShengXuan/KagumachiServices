@@ -34,7 +34,7 @@ public class HomePageController {
     private MyKeepRepository myKeepRepository;
 	
 	@Autowired
-    private ProductRepository productrepository;
+    private ProductRepository productRepository;
 	
 	@Autowired
 	private ProductImageRepository productImageRepository;
@@ -42,15 +42,17 @@ public class HomePageController {
 	@Autowired
 	private ProductColorRepository productColorRepository;
 	
+	//舊版雖機商品
 	@GetMapping("/test")
-	public String  getProducts() {
+	public String getProducts() {
 		
 		List<Optional<Product>> productlist = new ArrayList<Optional<Product>>();
+
 		
 		for(int i=1;i<=6;i++) {
-			productlist.add(productrepository.findById(i));
+			productlist.add(productRepository.findById(i));
 		}
-
+		
 		JSONArray jsonarray = new JSONArray();
 		for(int i=0;i<productlist.size();i++) {
 			Product product = productlist.get(i).get();
@@ -90,16 +92,60 @@ public class HomePageController {
 		return jsonarray.toString();
 
 	}
-	@GetMapping("/testm")
-    public String getAllMyKeeps(@RequestParam Integer memberid) {
-		List<MyKeep> myKeepsList = myKeepRepository.findByMember_Memberid(memberid);
-		JSONArray jsonArray = new JSONArray();
-		for (MyKeep myKeep : myKeepsList) {
-            int productid = myKeep.getProduct().getProductid();
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("productid", productid);
-            jsonArray.put(jsonObject);
+	
+//	@GetMapping("/testm")
+//    public String getAllMyKeeps(@RequestParam Integer memberid) {
+//		List<MyKeep> myKeepsList = myKeepRepository.findByMember_Memberid(memberid);
+//		JSONArray jsonArray = new JSONArray();
+//		for (MyKeep myKeep : myKeepsList) {
+//            int productid = myKeep.getProduct().getProductid();
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("productid", productid);
+//            jsonArray.put(jsonObject);
+//		}
+//		return jsonArray.toString();
+//    }
+	
+	//新版一個沙發大類
+	@GetMapping()
+	public String getallProducts() {
+		List<Product> products = productRepository.findAll();
+		JSONArray jsonarray = new JSONArray();
+		int count=0;
+		
+		for(Product product :products) {
+			if(product.getSubCategory().getSubcategoryid()==17 && count<=6) {
+				JSONObject jsonobject = new JSONObject();
+				jsonobject.put("productid",product.getProductid());
+				jsonobject.put("dataname", product.getProductname());
+				int productid = product.getProductid();
+				List<ProductColor> productcolors = productColorRepository.findByProduct_Productid(productid);
+	            JSONArray productdetails = new JSONArray();
+	            for (ProductColor productcolor : productcolors) {
+	                JSONObject productdetail = new JSONObject();
+//	                productdetail.put("color", productcolor.getColorname());
+	                int colorsid = productcolor.getColorsid();
+	                List<ProductImage> productImage = productImageRepository.findAllByProduct_ProductidAndProductColor_Colorsid(productid, colorsid);
+	                String imageUrl = productImage.stream()
+	                        .findFirst()
+	                        .map(ProductImage::getImageurl)
+	                        .orElse(""); // 如果沒有圖片，返回空字串
+
+	                productdetail.put("dataimage", imageUrl);
+	                productdetails.put(productdetail);
+	            }
+	                jsonobject.put("productdetails", productdetails);	
+	    			jsonobject.put("discountprice", product.getDiscountprice());
+	    			jsonobject.put("unitprice", product.getUnitprice());
+
+	    			jsonarray.put(jsonobject);
+	    			count++;
+	    		}
+	    		
+	           }
+			
+			
+		return jsonarray.toString();
 		}
-		return jsonArray.toString();
-    }
+	
 }

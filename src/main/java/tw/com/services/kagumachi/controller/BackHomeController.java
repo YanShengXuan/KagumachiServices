@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tw.com.services.kagumachi.chat.model.Message;
+import tw.com.services.kagumachi.chat.repository.MessageRepository;
 import tw.com.services.kagumachi.model.MainCategory;
 import tw.com.services.kagumachi.model.Member;
 import tw.com.services.kagumachi.model.OrderDetail;
@@ -67,6 +69,9 @@ public class BackHomeController {
 
 	@Autowired
 	private ProductRepository productRepository;
+	
+	@Autowired
+	private MessageRepository messageRepository;
 	
 
 	@GetMapping()
@@ -279,6 +284,19 @@ public class BackHomeController {
 					jsonArray.put(jsonObject);	
 					}
 					
+	 			}
+	 			return jsonArray.toString();
+	 		}
+	 		@GetMapping("/getmessage")
+	 		public String getMessage() {
+	 			JSONArray jsonArray = new JSONArray();
+	 			
+	 			List<Message> messages = messageRepository.findAll();
+	 			for(Message message:messages) {
+	 				JSONObject jsonObject = new JSONObject();
+	 				System.out.println(message.isIsbackread());
+	 				jsonObject.put("isbackread",message.isIsbackread());
+	 				jsonArray.put(jsonObject);	
 	 			}
 	 			return jsonArray.toString();
 	 		}
