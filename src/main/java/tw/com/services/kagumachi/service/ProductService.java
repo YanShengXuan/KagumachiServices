@@ -218,7 +218,7 @@ public class ProductService {
 
     public Product updateProduct(Integer productid, ProductDTO productDTO) {
 
-        System.out.println("productid  "+productid);
+//        System.out.println("productid  "+productid);
 
         // 查找現有的 Product
         Product existingProduct = productRepository.findById(productid)
@@ -264,12 +264,12 @@ public class ProductService {
         // 保存更新的 Product
         existingProduct = productRepository.save(existingProduct);
 
-        System.out.println("existingProduct  "+existingProduct.getProductid());
+//        System.out.println("existingProduct  "+existingProduct.getProductid());
 
         // 處理商品顏色
         if (productDTO.getProductColors() != null) {
 
-            System.out.println("ProductDTO"+productDTO.getProductColors());
+//            System.out.println("ProductDTO"+productDTO.getProductColors());
 
             for (ProductDTO.ProductColorDTO colorDTO : productDTO.getProductColors()) {
                 ProductColor color;
@@ -279,7 +279,7 @@ public class ProductService {
                     // 更新顏色
                     color = productColorRepository.findById(colorDTO.getColorsid())
                             .orElseThrow(() -> new RuntimeException("Color not found with id: " + colorDTO.getColorsid()));
-                    System.out.println("UpdateColor "+colorDTO.getColorsid());
+//                    System.out.println("UpdateColor "+colorDTO.getColorsid());
                 } else {
                     // 新增顏色
                     color = new ProductColor();
@@ -294,9 +294,9 @@ public class ProductService {
                 color.setMinstock(colorDTO.getMinstock());
                 color.setUpdateat(colorDTO.getUpdateat());
                 ProductColor tmp = productColorRepository.save(color);// 保存顏色
-                System.out.println("ADDCOLOR COLOR"+ tmp.getColorsid());
-                System.out.println("AddColor"+colorDTO.getColorsid());
-                System.out.println("AddColor"+ colorDTO.getColorname());
+//                System.out.println("ADDCOLOR COLOR"+ tmp.getColorsid());
+//                System.out.println("AddColor"+colorDTO.getColorsid());
+//                System.out.println("AddColor"+ colorDTO.getColorname());
 
 
                 // 處理顏色的圖片
@@ -309,7 +309,7 @@ public class ProductService {
                             // 更新圖片
                             image = productImageRepository.findById(imageDTO.getImageid())
                                     .orElseThrow(() -> new RuntimeException("Image not found with id: " + imageDTO.getImageid()));
-                            System.out.println("更新"+imageDTO.getImageid());
+//                            System.out.println("更新"+imageDTO.getImageid());
                         } else {
                             // 新增圖片
                             image = new ProductImage();
@@ -322,10 +322,10 @@ public class ProductService {
                         image.setIsprimary(imageDTO.getIsprimary());
                         image.setUpdatedat(imageDTO.getUpdatedat());
                         productImageRepository.save(image); // 保存圖片
-                        System.out.println("新增"+imageDTO.getImageid());
+//                        System.out.println("新增"+imageDTO.getImageid());
 
 
-                        System.out.println("PRIMARay " + imageDTO.getIsprimary());
+//                        System.out.println("PRIMARay " + imageDTO.getIsprimary());
                     }
                 }
             }
@@ -343,19 +343,19 @@ public class ProductService {
         List<ProductImage> images = productImageRepository.findAllByProduct_Productid(productid);
         if (!images.isEmpty()) {
             productImageRepository.deleteAll(images);
-            System.out.println("刪除圖片數量: " + images.size());
+//            System.out.println("刪除圖片數量: " + images.size());
         }
 
         // 3. 再刪所有關聯的顏色
         List<ProductColor> colors = productColorRepository.findByProduct_Productid(productid);
         if (!colors.isEmpty()) {
             productColorRepository.deleteAll(colors);
-            System.out.println("刪除顏色數量: " + colors.size());
+//            System.out.println("刪除顏色數量: " + colors.size());
         }
 
         // 4. 最後刪除商品本身
         productRepository.deleteById(productid);
-        System.out.println("刪除商品 ID: " + productid);
+//        System.out.println("刪除商品 ID: " + productid);
     }
 
     public void deleteProductColorById(Integer colorId) {
@@ -367,12 +367,12 @@ public class ProductService {
         List<ProductImage> images = productImageRepository.findAllByProductColor_Colorsid(colorId);
         if (!images.isEmpty()) {
             productImageRepository.deleteAll(images);
-            System.out.println("刪除圖片數量: " + images.size());
+//            System.out.println("刪除圖片數量: " + images.size());
         }
 
         // 3. 最後刪除顏色
         productColorRepository.deleteById(colorId);
-        System.out.println("刪除顏色 ID: " + colorId);
+//        System.out.println("刪除顏色 ID: " + colorId);
     }
 
     public List<ProductDTO> searchProducts(String productname, Integer maincategoryid, Integer subcategoryid) {
@@ -485,6 +485,38 @@ public class ProductService {
         dto.setRating(product.getRating());
         dto.setReviewcount(product.getReviewcount());
         dto.setUpdateat(product.getUpdateat());
+
+        if (product.getMainCategory() != null) {
+            dto.setMaincategoryid(product.getMainCategory().getMaincategoryid()); // 設置主類別 ID
+
+            ProductDTO.MainCategoryDTO mainCategory = new ProductDTO.MainCategoryDTO();
+            mainCategory.setMaincategoryid(product.getMainCategory().getMaincategoryid());
+            mainCategory.setCategoryname(product.getMainCategory().getCategoryname());
+            mainCategory.setStatus(product.getMainCategory().getStatus());
+
+            // **處理 Sales (活動)**
+            if (product.getMainCategory().getSales() != null) {
+                Sales sales = product.getMainCategory().getSales();
+                ProductDTO.SalesDTO salesDTO = new ProductDTO.SalesDTO();
+                salesDTO.setSalesid(sales.getSalesid());
+                salesDTO.setName(sales.getName());
+                salesDTO.setSalesdesc(sales.getSalesdesc());
+                salesDTO.setDiscount(sales.getDiscount());
+
+                mainCategory.setSales(salesDTO);
+            }
+
+            dto.setMainCategory(mainCategory);
+        }
+
+        if (product.getSubCategory() != null) {
+            dto.setSubcategoryid(product.getSubCategory().getSubcategoryid()); // 設置副類別 ID
+            ProductDTO.SubCategoryDTO subCategory = new ProductDTO.SubCategoryDTO();
+            subCategory.setSubcategoryid(product.getSubCategory().getSubcategoryid());
+            subCategory.setCategoryname(product.getSubCategory().getCategoryname());
+            subCategory.setStatus(product.getSubCategory().getStatus());
+            dto.setSubCategory(subCategory);
+        }
 
 
         // 設置 ProductColors

@@ -3,7 +3,9 @@ package tw.com.services.kagumachi.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tw.com.services.kagumachi.model.Member;
+import tw.com.services.kagumachi.model.Order;
 import tw.com.services.kagumachi.repository.MemberRepository;
+import tw.com.services.kagumachi.repository.OrderRepository;
 
 
 import java.util.List;
@@ -13,6 +15,9 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
@@ -39,6 +44,12 @@ public class MemberService {
 
     public List<Member> searchMembers( String query){
         return memberRepository.findByEmailContainingOrPhoneContaining(query,query);
+    }
+
+
+    public Order getLatestOrderByMemberId(Integer memberid) {
+        return orderRepository.findLatestOrderByMemberId(memberid)
+                .orElse(null);
     }
 
 
