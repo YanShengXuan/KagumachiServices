@@ -5,13 +5,16 @@ import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import tw.com.services.kagumachi.model.Member;
 import tw.com.services.kagumachi.model.Order;
 import tw.com.services.kagumachi.repository.CartRepository;
 import tw.com.services.kagumachi.repository.OrderRepository;
+import tw.com.services.kagumachi.repository.ProductColorRepository;
 
 @Service
+@Transactional
 public class OrderService {
 	
 	@Autowired
@@ -19,6 +22,9 @@ public class OrderService {
 	
 	@Autowired
     CartRepository cartRepository;
+	
+	@Autowired
+    ProductColorRepository productColorRepository;
 	
 	public Integer getOrderIdbyOrderserial(String orderSerial){
 		return orderRepository.findByOrderserial(orderSerial);
@@ -41,7 +47,7 @@ public class OrderService {
         // 保存訂單到資料庫
         orderRepository.save(order);
         
-        // 刪除 carts 中 ispurchase = true 的資料
+        // 刪除 carts 中 ispurchase = 1 的資料
         cartRepository.deleteAll(cartRepository.findByMember_MemberidAndIspurchase(memberid, true));
         
         // 返回生成的 orderId

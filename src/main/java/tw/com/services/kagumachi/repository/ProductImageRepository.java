@@ -1,14 +1,14 @@
 package tw.com.services.kagumachi.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import tw.com.services.kagumachi.model.ProductImage;
-
-import java.util.List;
-import java.util.Optional;
 @Repository
 public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
 
@@ -24,4 +24,7 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Inte
     
     @Query("SELECT p.imageurl FROM ProductImage p WHERE p.product.productid = :productid AND p.isprimary = true")
     Optional<String> findImageUrlsByProductId(@Param("productid") Integer productid);
+
+	Optional<ProductImage> findByProduct_ProductidAndProductColor_ColorsidAndIsprimary(Integer productid,
+			Integer colorsId, boolean b);
 }
