@@ -2,10 +2,7 @@ package tw.com.services.kagumachi.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tw.com.services.kagumachi.model.*;
 import tw.com.services.kagumachi.repository.*;
 
@@ -45,7 +42,7 @@ public class ProductCartKeepController {
         Product product = productRepository.findById(productid)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        // 檢查是否已收藏
+
         Optional<MyKeep> existingFavorite = myKeepRepository.findByMemberAndProduct(member, product);
         if (existingFavorite.isPresent()) {
             return ResponseEntity.ok(Map.of("message", "已收藏"));
@@ -94,5 +91,11 @@ public class ProductCartKeepController {
         }
 
         return ResponseEntity.ok(Map.of("message", "Added successfully"));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Map<String, Integer>> getCartItemCount(@RequestParam Integer memberid) {
+        int itemCount = cartRepository.countByMember_Memberid(memberid);
+        return ResponseEntity.ok(Map.of("count", itemCount));
     }
 }

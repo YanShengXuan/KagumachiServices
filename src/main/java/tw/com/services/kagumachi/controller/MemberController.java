@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tw.com.services.kagumachi.model.Member;
+import tw.com.services.kagumachi.model.Order;
 import tw.com.services.kagumachi.service.MemberService;
 
 import java.util.List;
@@ -35,4 +36,15 @@ public class MemberController {
     public List<Member> searchMembers(@RequestParam String query) {
         return memberService.searchMembers(query);
     }
+
+    @GetMapping("/latest/{memberid}")
+    public ResponseEntity<?> getLatestOrderByMemberId(@PathVariable Integer memberid) {
+        Order latestOrder = memberService.getLatestOrderByMemberId(memberid);
+        if (latestOrder != null) {
+            return ResponseEntity.ok(latestOrder);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

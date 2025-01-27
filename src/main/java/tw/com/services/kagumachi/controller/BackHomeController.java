@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tw.com.services.kagumachi.chat.model.Message;
+import tw.com.services.kagumachi.chat.repository.MessageRepository;
 import tw.com.services.kagumachi.model.MainCategory;
 import tw.com.services.kagumachi.model.Member;
 import tw.com.services.kagumachi.model.OrderDetail;
@@ -67,6 +69,9 @@ public class BackHomeController {
 
 	@Autowired
 	private ProductRepository productRepository;
+	
+	@Autowired
+	private MessageRepository messageRepository;
 	
 
 	@GetMapping()
@@ -242,7 +247,6 @@ public class BackHomeController {
 	            for (Product product : products) {
 	                if (product.getProductid().equals(orderdetail.getProduct().getProductid())) {
 	                    int mainCategoryId = product.getMainCategory().getMaincategoryid();
-	                    // 更新該主分類的出現次數
 	                    qMap.put(mainCategoryId, qMap.getOrDefault(mainCategoryId, 0) + 1);
 	                }
 	            }
@@ -268,9 +272,9 @@ public class BackHomeController {
 	 			if((productColor.getStock())-(productColor.getMinstock())<(productColor.getMinstock())) {
 	 				JSONObject jsonObject = new JSONObject();
 					jsonObject.put("productid",productColor.getProduct().getProductid());
-					jsonObject.put("colorsid ",productColor.getColorsid());
-					jsonObject.put("stock ",productColor.getStock());
-					jsonObject.put("minstock ",productColor.getStock()-productColor.getMinstock());
+					jsonObject.put("colorsid",productColor.getColorsid());
+					jsonObject.put("stock",productColor.getStock());
+					jsonObject.put("minstock",productColor.getStock()-productColor.getMinstock());
 					for(Product product:products) {
 						for(Suppliers supplier:suppliers) {
 							jsonObject.put("name",productColor.getProduct().getSupplier().getName());
@@ -280,6 +284,19 @@ public class BackHomeController {
 					jsonArray.put(jsonObject);	
 					}
 					
+	 			}
+	 			return jsonArray.toString();
+	 		}
+	 		@GetMapping("/getmessage")
+	 		public String getMessage() {
+	 			JSONArray jsonArray = new JSONArray();
+	 			
+	 			List<Message> messages = messageRepository.findAll();
+	 			for(Message message:messages) {
+	 				JSONObject jsonObject = new JSONObject();
+	 				System.out.println(message.isIsbackread());
+	 				jsonObject.put("isbackread",message.isIsbackread());
+	 				jsonArray.put(jsonObject);	
 	 			}
 	 			return jsonArray.toString();
 	 		}
