@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import tw.com.services.kagumachi.dto.OrderDeliveryDataDto;
 import tw.com.services.kagumachi.dto.OrderDetailsDto;
+import tw.com.services.kagumachi.model.Order;
 import tw.com.services.kagumachi.model.OrderDetail;
 import tw.com.services.kagumachi.model.ProductImage;
 import tw.com.services.kagumachi.repository.OrderDetailRepository;
+import tw.com.services.kagumachi.repository.OrderRepository;
 import tw.com.services.kagumachi.repository.ProductColorRepository;
 import tw.com.services.kagumachi.repository.ProductImageRepository;
 
@@ -28,6 +31,9 @@ public class OrderDetailsService {
 	
 	@Autowired
 	private ProductImageRepository productImageRepository;
+	
+	@Autowired
+	private OrderRepository orderRepository;
 	
 	public List<OrderDetailsDto> getDetails(@Param("orderId") Integer orderId){
 		List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_Orderid(orderId);
@@ -72,6 +78,21 @@ public class OrderDetailsService {
 			result.add(dto);
 		}
 		return result;
+	}
+	
+	public OrderDeliveryDataDto getDeliveryDataByOrderserial(String orderSerial){
+		Integer orderId = orderService.getOrderIdbyOrderserial(orderSerial);
+		Order order = orderRepository.findById(orderId)
+				.orElseThrow(() -> new RuntimeException("找不到對應的訂單 orderId:" + orderId));
+		
+		OrderDeliveryDataDto dto = new OrderDeliveryDataDto();
+		dto.setRecipient(order.getRecipient());
+		dto.setPhone(order.getPhone());
+		dto.setShippingmethod(order.getShippingmethod());
+		dto.setOrdercity(order.getOrdercity());
+		dto.setDistrict(order.getDistrict());
+		dto.setAddress(order.getAddress());
+		return dto;
 	}
 
 }

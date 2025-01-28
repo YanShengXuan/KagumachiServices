@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tw.com.services.kagumachi.dto.OrderDeliveryDataDto;
 import tw.com.services.kagumachi.dto.OrderDetailsDto;
 import tw.com.services.kagumachi.service.OrderDetailsService;
 
@@ -25,4 +26,10 @@ public class OrderDetailController {
 		List<OrderDetailsDto> orderDetails = orderDetailsService.getDetailsByOrderserial(orderSerial);
         return ResponseEntity.ok(orderDetails);
     }
+	
+	@GetMapping("/delivery/{orderserial}")
+	public ResponseEntity<OrderDeliveryDataDto> getDeliveyData(@PathVariable("orderserial") String orderSerial) {
+		OrderDeliveryDataDto orerDeliveryData = orderDetailsService.getDeliveryDataByOrderserial(orderSerial);
+		return ResponseEntity.ok(orerDeliveryData);
+	}
 }
