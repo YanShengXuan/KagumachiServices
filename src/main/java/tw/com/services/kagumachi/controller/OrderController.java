@@ -1,7 +1,5 @@
 package tw.com.services.kagumachi.controller;
 
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import tw.com.services.kagumachi.dto.OrderDetailsDto;
 import tw.com.services.kagumachi.dto.OrderDto;
 import tw.com.services.kagumachi.model.Order;
-import tw.com.services.kagumachi.model.OrderDetail;
-import tw.com.services.kagumachi.repository.OrderDetailRepository;
 import tw.com.services.kagumachi.repository.OrderRepository;
 import tw.com.services.kagumachi.service.OrderDetailsService;
+import tw.com.services.kagumachi.service.OrderService;
 
 @RestController
 @RequestMapping("/order")
@@ -26,6 +23,9 @@ public class OrderController {
 	
 	@Autowired
 	OrderRepository orderRepository;
+	
+	@Autowired
+	private OrderService orderService;
 	
 	@Autowired
 	OrderDetailsService orderDetailsService;
@@ -55,6 +55,17 @@ public class OrderController {
 		return orderDetailsService.getDetails(orderid);
 	}
 	
-	
+	@PostMapping("/{memberid}")
+    public Integer createOrder(@PathVariable Integer memberid, @RequestBody Order order) {
+		 try {
+		        // 呼叫 Service 保存訂單並返回 orderId
+		        Integer orderId = orderService.createOrderAndReturnId(memberid, order);
+		        return orderId; // 返回 orderId
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        return null; // 若出現錯誤返回 null 或其他適合的錯誤代碼
+		    }
+    }
+
 	
 }

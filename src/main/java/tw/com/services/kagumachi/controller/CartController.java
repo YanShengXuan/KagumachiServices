@@ -70,17 +70,9 @@ public class CartController {
 
 		cartRepository.saveAll(carts);
 	}
-
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@PostMapping("/step1/delete/{memberid}")
+	public void delete(@PathVariable Integer memberid) {
+		cartRepository.deleteById(memberid);
+	}
 }
