@@ -61,7 +61,9 @@ public class OrderDetailsService {
 			dto.setColorname(orderdetail.getProductColor().getColorname());
 			dto.setPrice(discountprice > 0 ? discountprice : unitprice);
 			dto.setQuantity(orderdetail.getQuantity());
-			
+			dto.setProductid(orderdetail.getProduct().getProductid());
+			dto.setColorsid(orderdetail.getProductColor().getColorsid());
+			dto.setOrderid(orderdetail.getOrder().getOrderid());		
 			Integer productId = orderdetail.getProduct().getProductid();
 			Optional<String> imageUrl = productImageRepository.findImageUrlsByProductId(productId);
 

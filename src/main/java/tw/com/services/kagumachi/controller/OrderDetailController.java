@@ -20,8 +20,8 @@ public class OrderDetailController {
 	@Autowired
 	private OrderDetailsService orderDetailsService;
 	
-	@GetMapping("{orderid}")
-	public ResponseEntity<List<OrderDetailsDto>> getDetails(@PathVariable("orderid") String orderSerial) {
+	@GetMapping("{orderserial}")
+	public ResponseEntity<List<OrderDetailsDto>> getDetails(@PathVariable("orderserial") String orderSerial) {
 		List<OrderDetailsDto> orderDetails = orderDetailsService.getDetailsByOrderserial(orderSerial);
         return ResponseEntity.ok(orderDetails);
     }
