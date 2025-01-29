@@ -1,6 +1,7 @@
 package tw.com.services.kagumachi.controller;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,11 @@ public class OrderController {
 	@GetMapping("/test")
 	public List<Order> test(){
 		return orderRepository.findAll();
+	}
+	
+	@GetMapping("/member/{orderid}")
+	public List<Order> member(@PathVariable Integer orderid){
+		return orderRepository.findAllById(Collections.singletonList(orderid));
 	}
 	
 	@PostMapping("/between")
