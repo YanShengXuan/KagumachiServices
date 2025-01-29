@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tw.com.services.kagumachi.dto.ProductDTO;
+import tw.com.services.kagumachi.dto.ProductReviewDTO;
 import tw.com.services.kagumachi.model.MainCategory;
 import tw.com.services.kagumachi.model.Product;
 import tw.com.services.kagumachi.model.SubCategory;
@@ -125,6 +126,12 @@ public class ProductController {
     public ResponseEntity<List<ProductDTO>> getProductsByMainCategory(@PathVariable Integer maincategoryid) {
         List<ProductDTO> products = productService.getProductsByMainCategory(maincategoryid);
         return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/{productid}/reviews")
+    public ResponseEntity<List<ProductReviewDTO>> getProductReviews(@PathVariable Integer productid) {
+        List<ProductReviewDTO> reviews = productService.getProductReviews(productid);
+        return ResponseEntity.ok(reviews);
     }
 
 }

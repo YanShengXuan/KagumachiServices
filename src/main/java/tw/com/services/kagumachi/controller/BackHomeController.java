@@ -73,7 +73,7 @@ public class BackHomeController {
 	@Autowired
 	private MessageRepository messageRepository;
 	
-
+	//銷售最多
 	@GetMapping()
 	public String getproduct() {
         List<OrderDetail> orderDetails = orderDetailRepository.findAll();
@@ -101,7 +101,7 @@ public class BackHomeController {
         return jsonArray.toString();
     }
 
-	
+	//新增會員人數
 	@GetMapping("/member")
 	public String getMember() {
 	    List<Member> members = memberRepository.findAll();
@@ -163,31 +163,8 @@ public class BackHomeController {
 
 	    return result.toString(); // 返回 JSON 字符串
 	}
-	@GetMapping("/getstock")
-    public String getStock() {
-        List<Suppliers> suppliers = suppliersRepository.findAll();
-        List<ProductColor> productColors = productColorRepository.findAll();
-        JSONArray combinedJsonArray = new JSONArray();
-
-        for (Suppliers supplier : suppliers) {
-            for (ProductColor productColor : productColors) {
-                JSONObject combinedJson = new JSONObject();
-                
-                // 添加 suppliers 表的数据
-                combinedJson.put("supplierid", supplier.getSupplierid());
-                combinedJson.put("phone", supplier.getPhone());
-                
-                // 添加 productcolors 表的数据
-                combinedJson.put("productid", productColor.getProduct().getProductid());
-                combinedJson.put("stock", productColor.getStock());
-                combinedJson.put("minstock", productColor.getMinstock());
-                
-                combinedJsonArray.put(combinedJson);
-            }
-        }
-
-        return combinedJsonArray.toString(); 
-    }
+	
+	//優惠活動
 	@GetMapping("/getsales")
     public String getSales() {
 		 List<MainCategory> maincategorys = mainCategoryRepository.findAll();
@@ -210,37 +187,17 @@ public class BackHomeController {
 		 return jsonArray.toString();
 	}
 
-//	@GetMapping("/test")
-//	public void getQuantity() {
-//		List<OrderDetail> orderdetails = orderDetailRepository.findAll();
-//		List<Product> products = productRepository.findAll();
-//		 Map<Integer, Integer> qMap = new HashMap<>();
-//		
-//		for(OrderDetail orderdetail:orderdetails) {
-//			//System.out.println(orderdetail.getProduct().getProductid());
-//			
-//			for(Product product:products) {
-//				if(product.getProductid()==orderdetail.getProduct().getProductid()) {
-////					System.out.println(product.getMainCategory().getMaincategoryid());
-//					qMap.put(product.getMainCategory().getMaincategoryid(), qMap.getOrDefault(product.getMainCategory().getMaincategoryid(), 0) + 1);
-//				}
-//			}
-//			
-//		}
-//		for (Map.Entry<Integer, Integer> entry : qMap.entrySet()) {
-//            System.out.println("數字 " + entry.getKey() + " 出現了 " + entry.getValue() + " 次");
-//        }
-//	}
-	 	@GetMapping("/quantity")
-	 	public ResponseEntity<Map<String, Integer>> getQuantity() {
-	        List<OrderDetail> orderdetails = orderDetailRepository.findAll();
-	        List<Product> products = productRepository.findAll();
+	 //目前訂單統計
+	 @GetMapping("/quantity")
+	 public ResponseEntity<Map<String, Integer>> getQuantity() {
+		List<OrderDetail> orderdetails = orderDetailRepository.findAll();
+	    List<Product> products = productRepository.findAll();
 
 	        // 初始化 Map，確保 1 到 6 的值都存在，並預設為 0
-	        Map<Integer, Integer> qMap = new HashMap<>();
-	        for (int i = 1; i <= 6; i++) {
-	            qMap.put(i, 0);
-	        }
+	     Map<Integer, Integer> qMap = new HashMap<>();
+	     for (int i = 1; i <= 6; i++) {
+	           qMap.put(i, 0);
+	      }
 
 	        // 統計出現次數
 	        for (OrderDetail orderdetail : orderdetails) {
@@ -260,14 +217,15 @@ public class BackHomeController {
 	        // 自動轉換 qMap 為 JSON 返回
 	        return ResponseEntity.ok(result);
 	    }
-	 	
-	 	@GetMapping("/test")
-	 	public String getallStock() {
-	 		List<ProductColor> productColors = productColorRepository.findAll();
-	 		List<Product> products = productRepository.findAll();
-	 		List<Suppliers> suppliers = suppliersRepository.findAll();
+	 
+	 //補獲商品
+	 @GetMapping("/getstock")
+	 public String getallStock() {
+	 	List<ProductColor> productColors = productColorRepository.findAll();
+	 	List<Product> products = productRepository.findAll();
+	 	List<Suppliers> suppliers = suppliersRepository.findAll();
 	 		
-	 		JSONArray jsonArray = new JSONArray();
+	 	JSONArray jsonArray = new JSONArray();
 	 		for(ProductColor productColor: productColors) {
 	 			if((productColor.getStock())-(productColor.getMinstock())<(productColor.getMinstock())) {
 	 				JSONObject jsonObject = new JSONObject();
@@ -287,8 +245,10 @@ public class BackHomeController {
 	 			}
 	 			return jsonArray.toString();
 	 		}
-	 		@GetMapping("/getmessage")
-	 		public String getMessage() {
+	 
+	 //客服
+	 @GetMapping("/getmessage")
+	 public String getMessage() {
 	 			JSONArray jsonArray = new JSONArray();
 	 			
 	 			List<Message> messages = messageRepository.findAll();
@@ -301,7 +261,8 @@ public class BackHomeController {
 	 			return jsonArray.toString();
 	 		}
 	 		
-	}
+
+}
 
 
 
