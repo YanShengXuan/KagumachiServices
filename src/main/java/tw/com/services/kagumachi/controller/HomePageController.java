@@ -93,19 +93,6 @@ public class HomePageController {
 
 	}
 	
-//	@GetMapping("/testm")
-//    public String getAllMyKeeps(@RequestParam Integer memberid) {
-//		List<MyKeep> myKeepsList = myKeepRepository.findByMember_Memberid(memberid);
-//		JSONArray jsonArray = new JSONArray();
-//		for (MyKeep myKeep : myKeepsList) {
-//            int productid = myKeep.getProduct().getProductid();
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("productid", productid);
-//            jsonArray.put(jsonObject);
-//		}
-//		return jsonArray.toString();
-//    }
-	
 	//新版一個沙發大類
 	@GetMapping()
 	public String getallProducts() {
