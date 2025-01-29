@@ -121,4 +121,10 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
+    @GetMapping("/byMainCategory/{maincategoryid}")
+    public ResponseEntity<List<ProductDTO>> getProductsByMainCategory(@PathVariable Integer maincategoryid) {
+        List<ProductDTO> products = productService.getProductsByMainCategory(maincategoryid);
+        return ResponseEntity.ok(products);
+    }
+
 }

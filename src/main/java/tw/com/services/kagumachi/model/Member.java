@@ -27,6 +27,8 @@ public class Member {
     private LocalDate registrationdate;
     private Integer gender;
     private Date birthday;
+    private String reset;
+
     
     public Integer getMemberid() {
         return memberid;
@@ -113,6 +115,14 @@ public class Member {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public String getReset() {
+        return reset;
+    }
+
+    public void setReset(String reset) {
+        this.reset = reset;
     }
 }
 
