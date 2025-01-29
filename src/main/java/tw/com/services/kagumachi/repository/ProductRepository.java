@@ -32,4 +32,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p WHERE p.mainCategory.id = :maincategoryid AND p.subCategory.id = :subcategoryid")
     List<Product> findByCategory(@Param("maincategoryid") int maincategoryid, @Param("subcategoryid") int subcategoryid);
 
+
+    @Query("SELECT p FROM Product p JOIN FETCH p.mainCategory WHERE p.mainCategory.maincategoryid = :maincategoryid")
+    List<Product> findByMainCategory(@Param("maincategoryid") Integer maincategoryid);
+
 }

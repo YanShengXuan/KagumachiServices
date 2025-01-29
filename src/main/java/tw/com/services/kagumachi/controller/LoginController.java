@@ -77,14 +77,35 @@ public class LoginController {
 
     @PostMapping("/register")
     public ResponseEntity<?> addMember(@RequestBody Member member) {
+//        try {
+//            // 1️⃣ 創建會員
+//            Member savedMember = loginService.addMember(member);
+//
+//            // 2️⃣ 生成 JWT Token
+//            String token = JwtUtil.generateToken(Long.valueOf(savedMember.getMemberid()));
+//
+//            // 3️⃣ 返回 Token 和 MemberId
+//            Map<String, Object> response = new HashMap<>();
+//            response.put("token", token);
+//            response.put("memberId", savedMember.getMemberid());
+//
+//            return ResponseEntity.ok(response);
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//        }
         try {
-            // 1️⃣ 創建會員
+            // 1️⃣ 檢查該 Email 是否已經註冊
+            if (memberRepository.findByEmail(member.getEmail()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"message\": \"該信箱已經被註冊！\"}");
+            }
+
+            // 2️⃣ 創建會員
             Member savedMember = loginService.addMember(member);
 
-            // 2️⃣ 生成 JWT Token
+            // 3️⃣ 生成 JWT Token
             String token = JwtUtil.generateToken(Long.valueOf(savedMember.getMemberid()));
 
-            // 3️⃣ 返回 Token 和 MemberId
+            // 4️⃣ 返回 Token 和 MemberId
             Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("memberId", savedMember.getMemberid());

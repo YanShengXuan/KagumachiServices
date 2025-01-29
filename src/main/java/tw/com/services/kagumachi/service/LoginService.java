@@ -24,6 +24,8 @@ public class LoginService {
         return memberRepository.save(member);
     }
 
+
+
     public Member login(String email, String password) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("帳號不存在"));
