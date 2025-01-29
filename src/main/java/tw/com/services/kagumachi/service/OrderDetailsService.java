@@ -24,6 +24,7 @@ import tw.com.services.kagumachi.model.Order;
 import tw.com.services.kagumachi.model.OrderDetail;
 import tw.com.services.kagumachi.model.Product;
 import tw.com.services.kagumachi.model.ProductColor;
+import tw.com.services.kagumachi.model.ProductImage;
 import tw.com.services.kagumachi.repository.OrderDetailRepository;
 import tw.com.services.kagumachi.repository.OrderRepository;
 import tw.com.services.kagumachi.repository.ProductColorRepository;
@@ -110,19 +111,20 @@ public class OrderDetailsService {
 			OrderDetailsDto dto = new OrderDetailsDto();
 			int unitprice = orderdetail.getProduct().getUnitprice();
 			int discountprice = orderdetail.getProduct().getDiscountprice() != null ? orderdetail.getProduct().getDiscountprice() : 0;
+			Integer productId = orderdetail.getProduct().getProductid();
+			Integer colorsId = orderdetail.getProductColor().getColorsid();
 			dto.setOrderdetailid(orderdetail.getOrderdetailid());
 			dto.setProductname(orderdetail.getProduct().getProductname());
 			dto.setColorname(orderdetail.getProductColor().getColorname());
 			dto.setPrice(discountprice > 0 ? discountprice : unitprice);
 			dto.setQuantity(orderdetail.getQuantity());
-			dto.setProductid(orderdetail.getProduct().getProductid());
-			dto.setColorsid(orderdetail.getProductColor().getColorsid());
+			dto.setProductid(productId);
+			dto.setColorsid(colorsId);
 			dto.setOrderid(orderdetail.getOrder().getOrderid());		
-			Integer productId = orderdetail.getProduct().getProductid();
-			Optional<String> imageUrl = productImageRepository.findImageUrlsByProductId(productId);
+			
+			Optional<ProductImage> image = productImageRepository.findByProduct_ProductidAndProductColor_ColorsidAndIsprimary(productId, colorsId, true);
+			dto.setImageurl(image.get().getImageurl());
 
-			dto.setImageurl(imageUrl.orElseThrow(() -> 
-            new IllegalStateException("商品 ID " + orderdetail.getProduct().getProductid() + " 找不到主圖片")));
 			result.add(dto);
 		}
 		return result;
