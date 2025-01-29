@@ -14,15 +14,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+
+import tw.com.services.kagumachi.dto.OrderDeliveryDataDto;
+import tw.com.services.kagumachi.dto.OrderDetailsDto;
+
 import tw.com.services.kagumachi.dto.OrderAllMonthDto;
 import tw.com.services.kagumachi.dto.OrderDetailDTO;
 import tw.com.services.kagumachi.dto.OrderDetailsDto;
 import tw.com.services.kagumachi.dto.OrderSeasonDto;
+
 import tw.com.services.kagumachi.model.Order;
 import tw.com.services.kagumachi.model.OrderDetail;
 import tw.com.services.kagumachi.model.Product;
 import tw.com.services.kagumachi.model.ProductColor;
 import tw.com.services.kagumachi.repository.OrderDetailRepository;
+import tw.com.services.kagumachi.repository.OrderRepository;
 import tw.com.services.kagumachi.repository.ProductColorRepository;
 import tw.com.services.kagumachi.repository.ProductImageRepository;
 
@@ -39,6 +45,9 @@ public class OrderDetailsService {
 	
 	@Autowired
 	ProductImageRepository productImageRepository;
+	
+	@Autowired
+	private OrderRepository orderRepository;
 	
 	public List<OrderDetailsDto> getDetails(@Param("orderId") Integer orderId){
 		List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_Orderid(orderId);
@@ -109,7 +118,9 @@ public class OrderDetailsService {
 			dto.setColorname(orderdetail.getProductColor().getColorname());
 			dto.setPrice(discountprice > 0 ? discountprice : unitprice);
 			dto.setQuantity(orderdetail.getQuantity());
-			
+			dto.setProductid(orderdetail.getProduct().getProductid());
+			dto.setColorsid(orderdetail.getProductColor().getColorsid());
+			dto.setOrderid(orderdetail.getOrder().getOrderid());		
 			Integer productId = orderdetail.getProduct().getProductid();
 			Optional<String> imageUrl = productImageRepository.findImageUrlsByProductId(productId);
 
@@ -120,6 +131,21 @@ public class OrderDetailsService {
 		return result;
 	}
 	
+	public OrderDeliveryDataDto getDeliveryDataByOrderserial(String orderSerial){
+		Integer orderId = orderService.getOrderIdbyOrderserial(orderSerial);
+		Order order = orderRepository.findById(orderId)
+				.orElseThrow(() -> new RuntimeException("找不到對應的訂單 orderId:" + orderId));
+		
+		OrderDeliveryDataDto dto = new OrderDeliveryDataDto();
+		dto.setRecipient(order.getRecipient());
+		dto.setPhone(order.getPhone());
+		dto.setShippingmethod(order.getShippingmethod());
+		dto.setOrdercity(order.getOrdercity());
+		dto.setDistrict(order.getDistrict());
+		dto.setAddress(order.getAddress());
+		return dto;
+	}
+
 	public void saveOrderDetails(int orderId, List<OrderDetailDTO> OrderDetailDTOs) {
         // 將每個 orderDetail 設定對應的 orderId
         for (OrderDetailDTO dto : OrderDetailDTOs) {

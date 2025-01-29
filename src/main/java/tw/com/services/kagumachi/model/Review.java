@@ -20,6 +20,16 @@ public class Review {
 
     private Integer rating;
     private String content;
+    
+    @ManyToOne
+    @JoinColumn(name = "orderid")
+    private Order order;
+    
+    @ManyToOne
+    @JoinColumn(name = "colorsid")
+    private ProductColor productcolor;
+    
+    private Boolean issubmitted;
 
     public Integer getReviewid() {
         return reviewid;
@@ -60,4 +70,32 @@ public class Review {
     public void setContent(String content) {
         this.content = content;
     }
+
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+
+	public ProductColor getProductcolor() {
+		return productcolor;
+	}
+
+	public void setProductcolor(ProductColor productcolor) {
+		this.productcolor = productcolor;
+	}
+
+	public Boolean getIssubmitted() {
+		return issubmitted;
+	}
+
+	public void setIssubmitted(Boolean issubmitted) {
+		this.issubmitted = issubmitted;
+	}
+
+	
+
+	
 }

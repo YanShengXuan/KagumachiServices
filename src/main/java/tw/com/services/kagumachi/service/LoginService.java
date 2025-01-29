@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import tw.com.services.kagumachi.model.Member;
 import tw.com.services.kagumachi.repository.MemberRepository;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class LoginService {
 
@@ -24,6 +27,8 @@ public class LoginService {
         return memberRepository.save(member);
     }
 
+
+
     public Member login(String email, String password) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("帳號不存在"));
@@ -33,6 +38,31 @@ public class LoginService {
             throw new IllegalArgumentException("密碼錯誤");
         }
         return member;
+    }
+
+    public String saveResetToken(String email) {
+        Optional<Member> memberOpt = memberRepository.findByEmail(email);
+        if (memberOpt.isEmpty()) {
+            throw new IllegalArgumentException("此信箱尚未註冊");
+        }
+
+        Member member = memberOpt.get();
+        String token = UUID.randomUUID().toString();
+        member.setReset(token);
+        memberRepository.save(member);
+
+        return token;
+    }
+
+
+    public Optional<Member> getMemberByResetToken(String token) {
+        return memberRepository.findByReset(token);
+    }
+
+
+    public void clearResetToken(Member member) {
+        member.setReset(null);
+        memberRepository.save(member);
     }
 
 

@@ -7,6 +7,9 @@ public class OrderDetailsDto {
 	private Integer price;
 	private Integer quantity;
 	private String imageurl;
+	private Integer productid;
+	private Integer colorsid;
+	private Integer orderid;
 	
 	public Integer getOrderdetailid() {
 		return orderdetailid;
@@ -43,6 +46,24 @@ public class OrderDetailsDto {
 	}
 	public void setImageurl(String imageurl) {
 		this.imageurl = imageurl;
+	}
+	public Integer getProductid() {
+		return productid;
+	}
+	public void setProductid(Integer productid) {
+		this.productid = productid;
+	}
+	public Integer getColorsid() {
+		return colorsid;
+	}
+	public void setColorsid(Integer colorsid) {
+		this.colorsid = colorsid;
+	}
+	public Integer getOrderid() {
+		return orderid;
+	}
+	public void setOrderid(Integer orderid) {
+		this.orderid = orderid;
 	}
 	
 }
