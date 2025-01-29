@@ -3,6 +3,7 @@ package tw.com.services.kagumachi.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tw.com.services.kagumachi.dto.ProductDTO;
+import tw.com.services.kagumachi.dto.ProductReviewDTO;
 import tw.com.services.kagumachi.model.*;
 import tw.com.services.kagumachi.repository.*;
 
@@ -30,6 +31,9 @@ public class ProductService {
 
     @Autowired
     private SubCategoryRepository subCategoryRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     public Product addProduct(ProductDTO productDTO) {
         // 1. 將 ProductDTO 映射為 Product
@@ -622,6 +626,28 @@ public class ProductService {
                 return colorDTO;
             }).collect(Collectors.toList());
             dto.setProductColors(colorDTOs);
+
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    public List<ProductReviewDTO> getProductReviews(Integer productid) {
+        List<Review> reviews = reviewRepository.findByProduct_Productid(productid);
+
+        return reviews.stream().map(review -> {
+            ProductReviewDTO dto = new ProductReviewDTO();
+            dto.setReviewid(review.getReviewid());
+            dto.setProductid(review.getProduct().getProductid());
+
+            if (review.getMember() != null) {
+                dto.setRealname(review.getMember().getRealname());
+            } else {
+                dto.setRealname("匿名用戶");
+            }
+
+            dto.setRating(review.getRating());
+            dto.setContent(review.getContent());
+
 
             return dto;
         }).collect(Collectors.toList());
