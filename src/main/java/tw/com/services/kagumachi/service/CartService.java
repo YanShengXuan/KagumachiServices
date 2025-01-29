@@ -35,8 +35,13 @@ public class CartService {
 			dto.setQuantity(cart.getQuantity());
 			dto.setUnitprice(cart.getProduct().getUnitprice());
 			dto.setIspurchase(cart.getIspurchase());
-			Optional<ProductImage> productImage = productImageRepository.findByProduct_ProductidAndProductColor_Colorsid(cart.getProduct().getProductid(), cart.getProductColor().getColorsid());
-			dto.setImageurl(productImage.get().getImageurl());
+			List<ProductImage> productImages = productImageRepository.findAllByProduct_ProductidAndProductColor_Colorsid(cart.getProduct().getProductid(), cart.getProductColor().getColorsid());
+			for(ProductImage productImage : productImages) {
+				if(productImage.getIsprimary() == true) {
+					dto.setImageurl(productImage.getImageurl());
+					break;
+				}
+			}
 			dto.setWidth(cart.getProduct().getWidth());
 			dto.setHeight(cart.getProduct().getHeight());
 			dto.setDepth(cart.getProduct().getDepth());

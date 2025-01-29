@@ -548,4 +548,82 @@ public class ProductService {
         dto.setProductColors(colorDTOs);
         return dto;
     }
+
+    public List<ProductDTO> getProductsByMainCategory(Integer maincategoryid) {
+        List<Product> products = productRepository.findByMainCategory(maincategoryid);
+
+        return products.stream().map(product -> {
+            ProductDTO dto = new ProductDTO();
+            dto.setProductid(product.getProductid());
+            dto.setProductname(product.getProductname());
+            dto.setProductdescription(product.getProductdescription());
+            dto.setMaincategoryid(product.getMainCategory().getMaincategoryid());
+            dto.setWidth(product.getWidth());
+            dto.setHeight(product.getHeight());
+            dto.setDepth(product.getDepth());
+            dto.setUnitprice(product.getUnitprice());
+            dto.setDiscountprice(product.getDiscountprice());
+            dto.setProductcost(product.getProductcost());
+            dto.setStatus(product.getStatus());
+            dto.setUnitsold(product.getUnitsold());
+            dto.setRating(product.getRating());
+            dto.setReviewcount(product.getReviewcount());
+            dto.setUpdateat(product.getUpdateat());
+
+            // 設置主類別
+            if (product.getMainCategory() != null) {
+                ProductDTO.MainCategoryDTO mainCategoryDTO = new ProductDTO.MainCategoryDTO();
+                mainCategoryDTO.setMaincategoryid(product.getMainCategory().getMaincategoryid());
+                mainCategoryDTO.setCategoryname(product.getMainCategory().getCategoryname());
+                mainCategoryDTO.setStatus(product.getMainCategory().getStatus());
+                if (product.getMainCategory().getSales() != null) {
+                    ProductDTO.SalesDTO salesDTO = new ProductDTO.SalesDTO();
+                    salesDTO.setSalesid(product.getMainCategory().getSales().getSalesid());
+                    salesDTO.setName(product.getMainCategory().getSales().getName());
+                    salesDTO.setSalesdesc(product.getMainCategory().getSales().getSalesdesc());
+                    salesDTO.setDiscount(product.getMainCategory().getSales().getDiscount());
+                    mainCategoryDTO.setSales(salesDTO);
+                }
+                dto.setMainCategory(mainCategoryDTO);
+            }
+
+            // 設置副類別
+            if (product.getSubCategory() != null) {
+                ProductDTO.SubCategoryDTO subCategoryDTO = new ProductDTO.SubCategoryDTO();
+                subCategoryDTO.setSubcategoryid(product.getSubCategory().getSubcategoryid());
+                subCategoryDTO.setCategoryname(product.getSubCategory().getCategoryname());
+                subCategoryDTO.setStatus(product.getSubCategory().getStatus());
+                dto.setSubCategory(subCategoryDTO);
+            }
+
+            // 設置 ProductColors 和 ProductImages
+            List<ProductColor> colors = productColorRepository.findByProduct_Productid(product.getProductid());
+            List<ProductDTO.ProductColorDTO> colorDTOs = colors.stream().map(color -> {
+                ProductDTO.ProductColorDTO colorDTO = new ProductDTO.ProductColorDTO();
+                colorDTO.setColorsid(color.getColorsid());
+                colorDTO.setColorname(color.getColorname());
+                colorDTO.setStock(color.getStock());
+                colorDTO.setMinstock(color.getMinstock());
+                colorDTO.setUpdateat(color.getUpdateat());
+
+                // 設置 ProductImages
+                List<ProductImage> images = productImageRepository.findAllByProduct_ProductidAndProductColor_Colorsid(
+                        product.getProductid(), color.getColorsid());
+                List<ProductDTO.ProductImageDTO> imageDTOs = images.stream().map(image -> {
+                    ProductDTO.ProductImageDTO imageDTO = new ProductDTO.ProductImageDTO();
+                    imageDTO.setImageid(image.getImageid());
+                    imageDTO.setImageurl(image.getImageurl());
+                    imageDTO.setIsprimary(image.getIsprimary());
+                    imageDTO.setUpdatedat(image.getUpdatedat());
+                    return imageDTO;
+                }).collect(Collectors.toList());
+
+                colorDTO.setProductImages(imageDTOs);
+                return colorDTO;
+            }).collect(Collectors.toList());
+            dto.setProductColors(colorDTOs);
+
+            return dto;
+        }).collect(Collectors.toList());
+    }
 }

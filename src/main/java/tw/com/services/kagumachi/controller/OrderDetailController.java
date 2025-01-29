@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+import tw.com.services.kagumachi.dto.OrderDeliveryDataDto;
+
 import tw.com.services.kagumachi.dto.OrderDetailDTO;
 import tw.com.services.kagumachi.dto.OrderDetailsDto;
 import tw.com.services.kagumachi.service.OrderDetailsService;
@@ -23,12 +26,19 @@ public class OrderDetailController {
 	@Autowired
 	private OrderDetailsService orderDetailsService;
 	
-	@GetMapping("{orderid}")
-	public ResponseEntity<List<OrderDetailsDto>> getDetails(@PathVariable("orderid") String orderSerial) {
+	@GetMapping("{orderserial}")
+	public ResponseEntity<List<OrderDetailsDto>> getDetails(@PathVariable("orderserial") String orderSerial) {
 		List<OrderDetailsDto> orderDetails = orderDetailsService.getDetailsByOrderserial(orderSerial);
         return ResponseEntity.ok(orderDetails);
     }
 	
+
+	@GetMapping("/delivery/{orderserial}")
+	public ResponseEntity<OrderDeliveryDataDto> getDeliveyData(@PathVariable("orderserial") String orderSerial) {
+		OrderDeliveryDataDto orerDeliveryData = orderDetailsService.getDeliveryDataByOrderserial(orderSerial);
+		return ResponseEntity.ok(orerDeliveryData);
+	}
+
 	@PostMapping("/{orderId}")
     public ResponseEntity<String> saveOrderDetails(
 //	public void saveOrderDetails(
@@ -42,4 +52,5 @@ public class OrderDetailController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }
     }
+
 }

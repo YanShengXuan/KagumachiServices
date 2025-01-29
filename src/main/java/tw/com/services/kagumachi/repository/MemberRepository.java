@@ -17,6 +17,8 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     Optional<Member> findByMemberid(Integer memberid);
 
     List<Member> findByEmailContainingOrPhoneContaining(String email, String phone);
+
+    Optional<Member> findByReset(String reset);
 }
 
 
