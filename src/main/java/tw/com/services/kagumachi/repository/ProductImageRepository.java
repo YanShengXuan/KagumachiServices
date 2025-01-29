@@ -21,10 +21,7 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Inte
     List<ProductImage> findAllByProductColor_Colorsid(Integer colorsid);
 
     List<ProductImage> findAllByProduct_Productid(Integer productid);
-    
-    @Query("SELECT p.imageurl FROM ProductImage p WHERE p.product.productid = :productid AND p.isprimary = true")
-    Optional<String> findImageUrlsByProductId(@Param("productid") Integer productid);
-
+  
 	Optional<ProductImage> findByProduct_ProductidAndProductColor_ColorsidAndIsprimary(Integer productid,
 			Integer colorsId, boolean b);
 }
