@@ -1,5 +1,7 @@
 package tw.com.services.kagumachi.controller;
 
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tw.com.services.kagumachi.dto.OrderAllMonthDto;
 import tw.com.services.kagumachi.dto.OrderDetailsDto;
 import tw.com.services.kagumachi.dto.OrderDto;
+import tw.com.services.kagumachi.dto.OrderSeasonDto;
 import tw.com.services.kagumachi.model.Order;
+import tw.com.services.kagumachi.model.SubCategory;
 import tw.com.services.kagumachi.repository.OrderRepository;
+import tw.com.services.kagumachi.repository.SubCategoryRepository;
 import tw.com.services.kagumachi.service.OrderDetailsService;
 import tw.com.services.kagumachi.service.OrderService;
 
@@ -30,9 +36,17 @@ public class OrderController {
 	@Autowired
 	OrderDetailsService orderDetailsService;
 	
+	@Autowired
+	SubCategoryRepository subCategoryRepository;
+	
 	@GetMapping("/test")
 	public List<Order> test(){
 		return orderRepository.findAll();
+	}
+	
+	@GetMapping("/member/{orderid}")
+	public List<Order> member(@PathVariable Integer orderid){
+		return orderRepository.findAllById(Collections.singletonList(orderid));
 	}
 	
 	@PostMapping("/between")
@@ -53,6 +67,22 @@ public class OrderController {
 	@GetMapping("/details/{orderid}")
 	public List<OrderDetailsDto> details(@PathVariable Integer orderid){
 		return orderDetailsService.getDetails(orderid);
+	}
+	
+	@GetMapping("/orderSeason/{startDate}/{endDate}")
+	public List<OrderSeasonDto> getOrderSeason(@PathVariable LocalDate startDate,
+			@PathVariable LocalDate endDate){
+		return orderDetailsService.getSeasonQuantity(startDate, endDate);
+	}
+	
+	@GetMapping("/orderAllMonth/{year}")
+	public List<OrderAllMonthDto> getOrderAllMonth(@PathVariable Integer year){
+		return orderDetailsService.getAllMonthQuantity(year);
+	}
+	
+	@GetMapping("/allSubCategory")
+	public List<SubCategory> allsubCategory(){
+		return subCategoryRepository.findAll();
 	}
 	
 	@PostMapping("/{memberid}")
