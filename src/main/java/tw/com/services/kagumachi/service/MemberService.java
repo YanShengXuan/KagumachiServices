@@ -1,11 +1,11 @@
 package tw.com.services.kagumachi.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tw.com.services.kagumachi.model.Member;
 import tw.com.services.kagumachi.model.Order;
-import tw.com.services.kagumachi.repository.MemberRepository;
-import tw.com.services.kagumachi.repository.OrderRepository;
+import tw.com.services.kagumachi.repository.*;
 
 
 import java.util.List;
@@ -18,6 +18,18 @@ public class MemberService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
+    private MyKeepRepository myKeepRepository;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
@@ -37,9 +49,24 @@ public class MemberService {
             return memberRepository.save(existingMember);
         }).orElseThrow(() -> new RuntimeException("Member not found with id " + id));
     }
-
+    @Transactional
     public void deleteMember(Integer id){
-        memberRepository.deleteById(id);
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Member not found with id " + id));
+
+        List<Integer> orderIds = orderRepository.findOrderIdsByMemberId(id);
+
+        if (!orderIds.isEmpty()) {
+            orderDetailRepository.deleteByOrderIds(orderIds);
+        }
+        orderRepository.deleteByMemberId(id);
+
+        cartRepository.deleteByMemberId(id);
+        reviewRepository.deleteByMemberId(id);
+        myKeepRepository.deleteByMemberId(id);
+
+        memberRepository.delete(member);
+
     }
 
     public List<Member> searchMembers( String query){
