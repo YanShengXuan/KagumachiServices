@@ -40,6 +40,8 @@ public class SearchTwoController {
 	public String getProducts(@PathVariable int main,@PathVariable int sub) {
 		List<Product> list = productRepository.findByCategory(main, sub);
 		JSONArray jsonarray = new JSONArray();
+		int count=0;
+		
 		 for (Product product : list) {
 	            JSONObject jsonObject = new JSONObject();
 	            jsonObject.put("count", list.size());
@@ -78,7 +80,7 @@ public class SearchTwoController {
 		JSONArray jsonarray = new JSONArray();
 		int count=0;
 		for (Product product : list) {
-			if(product.getDiscountprice()< pri) {
+			if(product.getDiscountprice()<=pri) {
 				System.out.println(product.getProductname());
 				System.out.println(product.getDiscountprice());
 				count++;
@@ -87,7 +89,7 @@ public class SearchTwoController {
 		 for (Product product : list) {
 			 if(product.getDiscountprice()<= pri) {
 	            JSONObject jsonObject = new JSONObject();
-	            jsonObject.put("count", list.size());
+	            jsonObject.put("count", count);
 	            jsonObject.put("productid", product.getProductid()); 
 	            jsonObject.put("dataname", product.getProductname()); 
 	            jsonObject.put("discountprice", product.getDiscountprice());
@@ -114,6 +116,12 @@ public class SearchTwoController {
 	            jsonarray.put(jsonObject); 
 	        }
 		 }
+		 	if(jsonarray.length()==0) {		 		
+		 		return jsonarray.toString();
+		 	}
+		 		
+		 		
+		 	System.out.println(jsonarray.toString());
 	        return jsonarray.toString();
 		
 	}
