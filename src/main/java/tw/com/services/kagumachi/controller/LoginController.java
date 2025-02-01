@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import tw.com.services.kagumachi.dto.AuthResponse;
+import tw.com.services.kagumachi.dto.GoogleLoginRequest;
 import tw.com.services.kagumachi.service.EmailService;
 import tw.com.services.kagumachi.util.JwtUtil;
 import tw.com.services.kagumachi.model.Member;
@@ -14,6 +16,7 @@ import tw.com.services.kagumachi.repository.MemberRepository;
 import tw.com.services.kagumachi.service.LoginService;
 import com.google.firebase.auth.FirebaseAuthException;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -112,5 +115,26 @@ public class LoginController {
         loginService.clearResetToken(member);
 
         return ResponseEntity.ok(Map.of("message", "密碼重設成功！"));
+    }
+
+
+    @PostMapping("/google")
+    public ResponseEntity<AuthResponse> googleLogin(@RequestBody GoogleLoginRequest request) {
+        String email = request.getEmail();
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+
+        Member member;
+        if (optionalMember.isPresent()) {
+            member = optionalMember.get();
+        } else {
+            member = new Member();
+            member.setEmail(email);
+            member.setRegistrationdate(LocalDate.now());
+            memberRepository.save(member);
+        }
+
+        String token = JwtUtil.generateToken(member.getMemberid().longValue());
+        return ResponseEntity.ok(new AuthResponse(token, member.getMemberid()));
     }
 }
