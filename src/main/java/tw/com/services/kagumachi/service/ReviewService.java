@@ -79,6 +79,24 @@ public class ReviewService {
 			review.setIssubmitted((Boolean)payload.get("isSubmitted"));
             
 			reviewRepository.save(review);
+			
+			updateProductRatingAndReviewCount(product);
 		}
+	}
+	
+	public void updateProductRatingAndReviewCount(Product product) {
+		List<Review> reviews = reviewRepository.findByProduct(product);
+		
+		int reviewCount = reviews.size();
+		int totalRating = reviews.stream()
+	        .mapToInt(Review::getRating)
+	        .sum();
+	    
+		double newRating = (reviewCount > 0) ? Math.ceil((totalRating / (double) reviewCount) * 10) / 10 : 0;
+	    
+	    product.setRating(newRating);
+	    product.setReviewcount(reviewCount);
+	    
+	    productRepository.save(product);
 	}
 }
