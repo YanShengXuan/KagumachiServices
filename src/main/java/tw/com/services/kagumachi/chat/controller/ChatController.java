@@ -8,9 +8,11 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.util.HtmlUtils;
+import tw.com.services.kagumachi.chat.model.Autochat;
 import tw.com.services.kagumachi.chat.model.InputMessage;
 import tw.com.services.kagumachi.chat.model.Message;
 import tw.com.services.kagumachi.chat.model.OutputMessage;
+import tw.com.services.kagumachi.chat.repository.AutochatRepository;
 import tw.com.services.kagumachi.chat.repository.MessageRepository;
 
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public class ChatController {
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private AutochatRepository autochatRepository;
 
     @MessageMapping("/init")
     @SendTo("/topic/messages")
@@ -88,6 +92,48 @@ public class ChatController {
 
         String escapedContent = HtmlUtils.htmlEscape(message.getContent());
 
+        if (message.getReceiverid().equals("0")) {
+            List<Autochat> autoChats = autochatRepository.findAll();
+            for (Autochat autoChat : autoChats) {
+                if (Boolean.TRUE.equals(autoChat.getIsautochat())) {
+                    String[] keywords = autoChat.getKeywords().split(",");
+                    for (String keyword : keywords) {
+                        if (escapedContent.contains(keyword.trim())) {
+                            Message savedMessage = new Message();
+                            savedMessage.setContent(escapedContent);
+                            savedMessage.setSenderid(Long.parseLong(message.getSenderid()));
+                            savedMessage.setReceiverid(Long.parseLong(message.getReceiverid()));
+                            savedMessage.setTimestamp(System.currentTimeMillis());
+                            savedMessage.setIsfrontread(true);
+                            savedMessage.setIsbackread(false);
+                            messageRepository.save(savedMessage);
+
+                            OutputMessage outputMessage = new OutputMessage(escapedContent, message.getSenderid(), message.getReceiverid());
+                            messagingTemplate.convertAndSend("/topic/messages/" + message.getReceiverid(), outputMessage);
+                            List<String> users = getUsers();
+                            messagingTemplate.convertAndSend("/topic/users", users);
+
+                            Message savedMessage2 = new Message();
+                            savedMessage2.setContent(autoChat.getAnswer());
+                            savedMessage2.setSenderid(0L);
+                            savedMessage2.setReceiverid(Long.parseLong(message.getSenderid()));
+                            savedMessage2.setTimestamp(System.currentTimeMillis());
+                            savedMessage2.setIsfrontread(false);
+                            savedMessage2.setIsbackread(true);
+                            messageRepository.save(savedMessage2);
+
+                            outputMessage = new OutputMessage(autoChat.getAnswer(), "0", message.getSenderid());
+                            messagingTemplate.convertAndSend("/topic/messages/" + message.getSenderid(), outputMessage);
+                            messagingTemplate.convertAndSend("/topic/messages/" + "0", outputMessage);
+                            users = getUsers();
+                            messagingTemplate.convertAndSend("/topic/users", users);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
         Message savedMessage = new Message();
         savedMessage.setContent(escapedContent);
         savedMessage.setSenderid(Long.parseLong(message.getSenderid()));
@@ -120,9 +166,11 @@ public class ChatController {
 //        System.out.println("Received markAsReadFront request for userId: " + userId);
         List<Message> messages = messageRepository.findBySenderidOrReceiverid(userId, userId);
         for (Message message : messages) {
-            message.setIsfrontread(true);
-            messageRepository.save(message);
-//            System.out.println("Message marked as read for front site: " + message);
+            if (!message.isIsfrontread()) {
+                message.setIsfrontread(true);
+                messageRepository.save(message);
+//                System.out.println("Message marked as read for front site: " + message);
+            }
         }
     }
 
@@ -131,9 +179,11 @@ public class ChatController {
 //        System.out.println("Received markAsReadBack request for userId: " + userId);
         List<Message> messages = messageRepository.findBySenderidOrReceiverid(userId, userId);
         for (Message message : messages) {
-            message.setIsbackread(true);
-            messageRepository.save(message);
-//            System.out.println("Message marked as read for back site: " + message);
+            if (!message.isIsbackread()) {
+                message.setIsbackread(true);
+                messageRepository.save(message);
+//                System.out.println("Message marked as read for back site: " + message);
+            }
         }
     }
 

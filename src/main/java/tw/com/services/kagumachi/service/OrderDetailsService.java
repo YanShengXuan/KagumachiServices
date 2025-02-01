@@ -145,6 +145,7 @@ public class OrderDetailsService {
 		return dto;
 	}
 
+	// by ChongWei
 	public void saveOrderDetails(int orderId, List<OrderDetailDTO> OrderDetailDTOs) {
         // 將每個 orderDetail 設定對應的 orderId
         for (OrderDetailDTO dto : OrderDetailDTOs) {
@@ -164,7 +165,29 @@ public class OrderDetailsService {
             orderDetail.setQuantity(dto.getQuantity());
             
             orderDetailRepository.save(orderDetail); // 儲存到資料庫
+            
+            // 更新庫存
+            updateProductStock(dto.getProductId(), dto.getColorsId(), dto.getQuantity());
         }
     }
+	
+	private void updateProductStock(int productId, int colorsId, int quantity) {
+		// 查找對應的 ProductColor
+        Optional<ProductColor> productColorOpt = productColorRepository.findById(colorsId);
+        if (productColorOpt.isPresent()) {
+            ProductColor productColor = productColorOpt.get();
+            
+            // 扣除庫存
+            int newStock = productColor.getStock() - quantity;
+            if (newStock < 0) {
+                throw new IllegalStateException("庫存不足，無法處理訂單");
+            }
 
+            productColor.setStock(newStock);
+            productColorRepository.save(productColor);
+            System.out.println("更新庫存: productId=" + productId + ", colorsId=" + colorsId + ", 新庫存=" + newStock);
+        } else {
+            throw new IllegalArgumentException("找不到對應的 ProductColor，productId=" + productId + ", colorsId=" + colorsId);
+        }
+	}
 }

@@ -1,7 +1,11 @@
 package tw.com.services.kagumachi.repository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.query.Param;
 
 import tw.com.services.kagumachi.model.Member;
 import tw.com.services.kagumachi.model.MyKeep;
@@ -16,4 +20,11 @@ public interface MyKeepRepository extends JpaRepository<MyKeep, Integer> {
     void deleteByMember_MemberidAndProduct_Productid(Integer memberid, Integer productid);
 
     Optional<MyKeep> findByMemberAndProduct(Member member, Product product);
+
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM MyKeep m WHERE m.member.memberid = :memberId")
+    void deleteByMemberId(@Param("memberId") Integer memberId);
+
 }
