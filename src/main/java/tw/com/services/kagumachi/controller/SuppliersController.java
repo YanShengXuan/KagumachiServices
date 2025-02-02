@@ -23,6 +23,11 @@ public class SuppliersController {
 	@Autowired
 	private SuppliersService suppliersService;
 	
+	@GetMapping("/allsuppliers")
+	private ResponseEntity<?> getallsuppliers() {
+		return suppliersService.getAllSuppliers();
+	}
+	
 	@GetMapping("/getallnames")
 	public List<String> getAllNames() {
 		return suppliersService.getAllSuppliersNames(); 

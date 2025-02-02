@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,16 @@ public class SuppliersService {
 	
 	@Autowired
 	private ProductRepository productRepository;
+	
+	public ResponseEntity<?> getAllSuppliers() {
+		List<Suppliers> suppliers = suppliersRepository.findAll();
+		for (Suppliers supplier : suppliers) {
+	    	if (supplier.getStatus() == null) {
+	    		supplier.setStatus("未合作");
+	    	}
+	    }
+		return ResponseEntity.ok(suppliers);
+	}
 	
 	public List<String> getAllSuppliersNames() {
 		return suppliersRepository.findAllSupplierNames();
