@@ -43,9 +43,33 @@ public class SuppliersService {
 	}
 	
 	public List<Suppliers> searchSuppliers(String supplierName, String categoryName) {
-        SubCategory subCategory = subCategoryRepository.findByCategoryname(categoryName);
-        
-        return suppliersRepository.findByNameAndSubCategory(supplierName, subCategory);
+		List<Suppliers> suppliers;
+		
+		if (supplierName == null && categoryName == null) {
+			suppliers = suppliersRepository.findAll();
+		}
+		
+		else if (supplierName != null && categoryName == null) {
+			suppliers = suppliersRepository.findByName(supplierName);
+		}
+		
+		else if (supplierName == null && categoryName != null) {
+	        SubCategory subCategory = subCategoryRepository.findByCategoryname(categoryName);
+	        suppliers = suppliersRepository.findBySubCategory(subCategory);
+	    }
+		
+		else {
+	        SubCategory subCategory = subCategoryRepository.findByCategoryname(categoryName);
+	        suppliers = suppliersRepository.findByNameAndSubCategory(supplierName, subCategory);
+	    }
+		
+		for (Suppliers supplier : suppliers) {
+	        if (supplier.getStatus() == null) {
+	            supplier.setStatus("未合作");
+	        }
+	    }
+	
+        return suppliers;
     }
 	
 	public void addSupplier(String addSupplierName, String addSubcategoryName, String addSupplierAddress, String addSupplierPhone, String addContactor) {
