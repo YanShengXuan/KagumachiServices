@@ -25,6 +25,7 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	Review findByProduct_ProductidAndProductcolor_Colorsid(Integer productId, Integer colorId);
+	Review findByProduct_ProductidAndProductcolor_ColorsidAndOrder_Orderid(Integer productId, Integer colorId, Integer orderId);
 
 	
 	List<Review> findByProduct(Product product);

@@ -36,8 +36,8 @@ public class ReviewService {
 	@Autowired
 	private ProductColorRepository productColorRepository;
 	
-	public ReviewDto getReviews(Integer productId, Integer colorsId){
-		Review review = reviewRepository.findByProduct_ProductidAndProductcolor_Colorsid(productId, colorsId);
+	public ReviewDto getReviews(Integer productId, Integer colorsId, Integer orderId){
+		Review review = reviewRepository.findByProduct_ProductidAndProductcolor_ColorsidAndOrder_Orderid(productId, colorsId, orderId);
 		
 		ReviewDto reviewDto = new ReviewDto();
 		if (review != null) {

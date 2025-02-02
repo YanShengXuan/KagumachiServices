@@ -28,8 +28,9 @@ public class ReviewController {
 	@GetMapping
     public ResponseEntity<?> getreviews(
         @RequestParam Integer productId, 
-        @RequestParam Integer colorsId){
-		ReviewDto reviews = reviewService.getReviews(productId, colorsId);
+        @RequestParam Integer colorsId,
+        @RequestParam Integer orderId){
+		ReviewDto reviews = reviewService.getReviews(productId, colorsId, orderId);
 		if (reviews == null) {
 	        return ResponseEntity.ok(Map.of(
 	                "orderid", null,
