@@ -1,12 +1,11 @@
 package tw.com.services.kagumachi.controller;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import tw.com.services.kagumachi.dto.AuthResponse;
 import tw.com.services.kagumachi.dto.GoogleLoginRequest;
 import tw.com.services.kagumachi.service.EmailService;
@@ -14,13 +13,11 @@ import tw.com.services.kagumachi.util.JwtUtil;
 import tw.com.services.kagumachi.model.Member;
 import tw.com.services.kagumachi.repository.MemberRepository;
 import tw.com.services.kagumachi.service.LoginService;
-import com.google.firebase.auth.FirebaseAuthException;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/login")
@@ -137,4 +134,8 @@ public class LoginController {
         String token = JwtUtil.generateToken(member.getMemberid().longValue());
         return ResponseEntity.ok(new AuthResponse(token, member.getMemberid()));
     }
+
+    private final String FACEBOOK_GRAPH_URL = "https://graph.facebook.com/me?fields=id,email&access_token=";
+
+
 }
