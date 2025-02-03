@@ -29,6 +29,7 @@ import tw.com.services.kagumachi.repository.OrderDetailRepository;
 import tw.com.services.kagumachi.repository.OrderRepository;
 import tw.com.services.kagumachi.repository.ProductColorRepository;
 import tw.com.services.kagumachi.repository.ProductImageRepository;
+import tw.com.services.kagumachi.repository.ProductRepository;
 
 @Service
 public class OrderDetailsService {
@@ -46,6 +47,9 @@ public class OrderDetailsService {
 	
 	@Autowired
 	private OrderRepository orderRepository;
+	
+	@Autowired
+	private ProductRepository productRepository;
 	
 	public List<OrderDetailsDto> getDetails(@Param("orderId") Integer orderId){
 		List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_Orderid(orderId);
@@ -163,6 +167,8 @@ public class OrderDetailsService {
             orderDetail.setProductColor(productColor);
             
             orderDetail.setQuantity(dto.getQuantity());
+            
+            orderDetail.setPrice(productRepository.findById(dto.getProductId()).get().getDiscountprice());
             
             orderDetailRepository.save(orderDetail); // 儲存到資料庫
             

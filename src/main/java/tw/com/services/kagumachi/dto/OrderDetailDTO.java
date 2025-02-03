@@ -4,7 +4,14 @@ public class OrderDetailDTO {
 	private int productId;
 	private int colorsId;
 	private int quantity;
+	private int price;
 	
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
 	public int getProductId() {
 		return productId;
 	}
