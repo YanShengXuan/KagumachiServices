@@ -41,9 +41,7 @@ public class SuppliersController {
 	    List<Suppliers> suppliers = suppliersService.searchSuppliers(supplierName, subcategoryName);
 	    
 	    if (suppliers.isEmpty()) {
-	        Map<String, String> errorResponse = new HashMap<>();
-	        errorResponse.put("message", "未找到符合條件的廠商");
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+	        return ResponseEntity.ok("[]");
 	    }
 	    
 	    return ResponseEntity.ok(suppliers);
