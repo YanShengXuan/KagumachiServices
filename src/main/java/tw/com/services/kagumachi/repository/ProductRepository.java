@@ -1,14 +1,14 @@
 package tw.com.services.kagumachi.repository;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import tw.com.services.kagumachi.model.Product;
-import org.springframework.data.jpa.repository.EntityGraph;
-
-import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
@@ -35,5 +35,4 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("SELECT p FROM Product p JOIN FETCH p.mainCategory WHERE p.mainCategory.maincategoryid = :maincategoryid")
     List<Product> findByMainCategory(@Param("maincategoryid") Integer maincategoryid);
-
 }

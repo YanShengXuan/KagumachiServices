@@ -29,6 +29,8 @@ public class OrderDetail {
     private ProductColor productColor;
 
     private Integer quantity;
+    
+    private Integer price;
 
     public Integer getOrderdetailid() {
         return orderdetailid;
@@ -70,6 +72,14 @@ public class OrderDetail {
 		this.productColor = productColor;
 	}
 	
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+
 	@Override
 	public String toString() {
 	    return "OrderDetail{" +

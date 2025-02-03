@@ -23,6 +23,11 @@ public class SuppliersController {
 	@Autowired
 	private SuppliersService suppliersService;
 	
+	@GetMapping("/allsuppliers")
+	private ResponseEntity<?> getallsuppliers() {
+		return suppliersService.getAllSuppliers();
+	}
+	
 	@GetMapping("/getallnames")
 	public List<String> getAllNames() {
 		return suppliersService.getAllSuppliersNames(); 
@@ -34,17 +39,11 @@ public class SuppliersController {
 	    String subcategoryName = payload.get("subcategoryName");
 
 	    List<Suppliers> suppliers = suppliersService.searchSuppliers(supplierName, subcategoryName);
+	    
 	    if (suppliers.isEmpty()) {
-	        Map<String, String> errorResponse = new HashMap<>();
-	        errorResponse.put("message", "未找到符合條件的廠商");
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+	        return ResponseEntity.ok("[]");
 	    }
 	    
-	    for (Suppliers supplier : suppliers) {
-	    	if (supplier.getStatus() == null) {
-	    		supplier.setStatus("未合作");
-	    	}
-	    }
 	    return ResponseEntity.ok(suppliers);
 	}
 	

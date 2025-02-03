@@ -119,6 +119,10 @@ public class SearchOneController {
 				jsonarray.put(jsonobject);	
 				}
 			}
+		if(jsonarray.length()==0) {		 		
+	 		return jsonarray.toString();
+	 	}
+
 		return jsonarray.toString();
 
 	}

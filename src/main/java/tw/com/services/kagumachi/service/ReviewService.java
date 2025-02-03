@@ -36,8 +36,8 @@ public class ReviewService {
 	@Autowired
 	private ProductColorRepository productColorRepository;
 	
-	public ReviewDto getReviews(Integer productId, Integer colorsId){
-		Review review = reviewRepository.findByProduct_ProductidAndProductcolor_Colorsid(productId, colorsId);
+	public ReviewDto getReviews(Integer productId, Integer colorsId, Integer orderId){
+		Review review = reviewRepository.findByProduct_ProductidAndProductcolor_ColorsidAndOrder_Orderid(productId, colorsId, orderId);
 		
 		ReviewDto reviewDto = new ReviewDto();
 		if (review != null) {
@@ -79,6 +79,24 @@ public class ReviewService {
 			review.setIssubmitted((Boolean)payload.get("isSubmitted"));
             
 			reviewRepository.save(review);
+			
+			updateProductRatingAndReviewCount(product);
 		}
+	}
+	
+	public void updateProductRatingAndReviewCount(Product product) {
+		List<Review> reviews = reviewRepository.findByProduct(product);
+		
+		int reviewCount = reviews.size();
+		int totalRating = reviews.stream()
+	        .mapToInt(Review::getRating)
+	        .sum();
+	    
+		double newRating = (reviewCount > 0) ? Math.ceil((totalRating / (double) reviewCount) * 10) / 10 : 0;
+	    
+	    product.setRating(newRating);
+	    product.setReviewcount(reviewCount);
+	    
+	    productRepository.save(product);
 	}
 }

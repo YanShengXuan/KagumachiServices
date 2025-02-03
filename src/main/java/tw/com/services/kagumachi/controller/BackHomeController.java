@@ -261,8 +261,45 @@ public class BackHomeController {
 	 			return jsonArray.toString();
 	 		}
 	 		
+	 //圖表
+	 @GetMapping("/getpic")
+	 public String  getAllPic() {
+	        List<OrderDetail> orderdetails = orderDetailRepository.findAll();
+	        JSONObject jsonObject = new JSONObject();
+	        
+	        int total = 0;
+	        int cost = 0;
+	        
+	        Map<Integer, Integer> categoryAmounts = new HashMap<>();
+	        for (int i = 1; i <= 6; i++) {
+	            categoryAmounts.put(i, 0); // 初始化每個大類別的金額為 0
+	        }
 
+	        for (OrderDetail orderdetail : orderdetails) {
+	            int discountPrice = orderdetail.getProduct().getDiscountprice();
+	            int quantity = orderdetail.getQuantity();
+	            int productCost = orderdetail.getProduct().getProductcost();
+	            int categoryId = orderdetail.getProduct().getMainCategory().getMaincategoryid();
+
+	            // 計算總收入和總成本
+	            total += discountPrice * quantity;
+	            cost += productCost * quantity;
+
+	            
+	            if (categoryAmounts.containsKey(categoryId)) {
+	                categoryAmounts.put(categoryId, categoryAmounts.get(categoryId) + (discountPrice * quantity));
+	            }
+	        }
+
+	        int fin = total - cost;
+        
+	        jsonObject.put("total", total);
+	        jsonObject.put("cost", cost);
+	        jsonObject.put("fin", fin);
+	        jsonObject.put("categoryAmounts", categoryAmounts); // 將各大類金額回傳
+
+	        return jsonObject.toString();
+	 }
 }
-
 
 
