@@ -1,7 +1,9 @@
 package tw.com.services.kagumachi.model;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,119 +18,146 @@ public class IncomeStatement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer incomestatementid;
+    private Integer id;
+
+    @Column(name = "startdate", nullable = false)
+    private LocalDate startDate;
+
+    @Column(name = "enddate", nullable = false)
+    private LocalDate endDate;
 
     @ManyToOne
-    @JoinColumn(name = "productid")
-    private Product product;
+    @JoinColumn(name = "maincategoryid", nullable = false)
+    private MainCategory mainCategory;
 
-    private LocalDate time;
+    @ManyToOne
+    @JoinColumn(name = "subcategoryid", nullable = false)
+    private SubCategory subCategory;
 
-    private Integer productcost;
+    @Column(name = "totalrevenue", nullable = false)
+    private Double totalRevenue;
 
-    private Integer operatingrevenue;
-    private Integer operatingexpenses;
-    private Integer grossprofit;
-    private Integer nonoperatingincomeandexpenses;
-    private Integer incometax;
-    private Integer netprofitaftertax;
-    private Integer capitalstock;
-    private Integer earningspershare;
-    
+    @Column(name = "totalcost", nullable = false)
+    private Double totalCost;
 
-	public Integer getIncomestatementid() {
-        return incomestatementid;
+    // STORED GENERATED Columns，只讀不寫
+    @Column(name = "operatingprofit", insertable = false, updatable = false)
+    private Double operatingProfit;
+
+    @Column(name = "nonoperatingincomeandexpense", nullable = false)
+    private Double nonOperatingIncomeAndExpense;
+
+    @Column(name = "incomebeforetax", insertable = false, updatable = false)
+    private Double incomeBeforeTax;
+
+    @Column(name = "tax", nullable = false)
+    private Double tax;
+
+    @Column(name = "netincome", insertable = false, updatable = false)
+    private Double netIncome;
+
+    // 只在資料庫自動產生，不允許自行更新
+    @Column(name = "createdat", nullable = false, insertable = false, updatable = false)
+    private Timestamp createdAt;
+
+    // 建構子
+    public IncomeStatement() {
     }
 
-    public void setIncomestatementid(Integer incomestatementid) {
-        this.incomestatementid = incomestatementid;
+    public Integer getId() {
+        return id;
     }
 
-    public Product getProduct() {
-        return product;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public LocalDate getTime() {
-        return time;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public void setTime(LocalDate time) {
-        this.time = time;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public Integer getProductcost() {
-        return productcost;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
-    public void setProductcost(Integer productcost) {
-        this.productcost = productcost;
+    public MainCategory getMainCategory() {
+		return mainCategory;
+	}
+
+	public void setMainCategory(MainCategory mainCategory) {
+		this.mainCategory = mainCategory;
+	}
+
+	public SubCategory getSubCategory() {
+		return subCategory;
+	}
+
+	public void setSubCategory(SubCategory subCategory) {
+		this.subCategory = subCategory;
+	}
+
+	public Double getTotalRevenue() {
+        return totalRevenue;
     }
 
-    public Integer getOperatingrevenue() {
-        return operatingrevenue;
+    public void setTotalRevenue(Double totalRevenue) {
+        this.totalRevenue = totalRevenue;
     }
 
-    public void setOperatingrevenue(Integer operatingrevenue) {
-        this.operatingrevenue = operatingrevenue;
+    public Double getTotalCost() {
+        return totalCost;
     }
 
-    public Integer getOperatingexpenses() {
-        return operatingexpenses;
+    public void setTotalCost(Double totalCost) {
+        this.totalCost = totalCost;
     }
 
-    public void setOperatingexpenses(Integer operatingexpenses) {
-        this.operatingexpenses = operatingexpenses;
+    public Double getOperatingProfit() {
+        return operatingProfit;
     }
 
-    public Integer getGrossprofit() {
-        return grossprofit;
+    // operatingProfit 不主動提供 setter，因為是資料庫自動生成
+    // 若真有需要自行計算并存回，確定 DB 設定允許更新
+
+    public Double getNonOperatingIncomeAndExpense() {
+        return nonOperatingIncomeAndExpense;
     }
 
-    public void setGrossprofit(Integer grossprofit) {
-        this.grossprofit = grossprofit;
+    public void setNonOperatingIncomeAndExpense(Double nonOperatingIncomeAndExpense) {
+        this.nonOperatingIncomeAndExpense = nonOperatingIncomeAndExpense;
     }
 
-    public Integer getNonoperatingincomeandexpenses() {
-        return nonoperatingincomeandexpenses;
+    public Double getIncomeBeforeTax() {
+        return incomeBeforeTax;
     }
 
-    public void setNonoperatingincomeandexpenses(Integer nonoperatingincomeandexpenses) {
-        this.nonoperatingincomeandexpenses = nonoperatingincomeandexpenses;
+    // incomeBeforeTax 不主動提供 setter
+
+    public Double getTax() {
+        return tax;
     }
 
-    public Integer getIncometax() {
-        return incometax;
+    public void setTax(Double tax) {
+        this.tax = tax;
     }
 
-    public void setIncometax(Integer incometax) {
-        this.incometax = incometax;
+    public Double getNetIncome() {
+        return netIncome;
     }
 
-    public Integer getNetprofitaftertax() {
-        return netprofitaftertax;
+    // netIncome 不主動提供 setter
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setNetprofitaftertax(Integer netprofitaftertax) {
-        this.netprofitaftertax = netprofitaftertax;
-    }
-
-    public Integer getCapitalstock() {
-        return capitalstock;
-    }
-
-    public void setCapitalstock(Integer capitalstock) {
-        this.capitalstock = capitalstock;
-    }
-
-    public Integer getEarningspershare() {
-        return earningspershare;
-    }
-
-    public void setEarningspershare(Integer earningspershare) {
-        this.earningspershare = earningspershare;
-    }
+    // createdAt 不主動提供 setter
 }

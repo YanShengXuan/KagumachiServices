@@ -29,6 +29,8 @@ public class OrderDetail {
     private ProductColor productColor;
 
     private Integer quantity;
+    
+    private Double price;
 
     public Integer getOrderdetailid() {
         return orderdetailid;
@@ -79,6 +81,14 @@ public class OrderDetail {
 	           ", colorsId=" + productColor.getColorsid() +
 	           ", quantity=" + quantity +
 	           "}";
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
 	}
     
 }
