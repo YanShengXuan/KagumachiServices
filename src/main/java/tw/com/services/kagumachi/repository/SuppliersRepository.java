@@ -20,5 +20,9 @@ public interface SuppliersRepository extends JpaRepository<Suppliers, Integer> {
 	List<Suppliers> findByNameAndSubCategory(String name, SubCategory subCategory);
 
     List<Suppliers> findByNameContainingIgnoreCase(String name);
+    
+    List<Suppliers> findByName(String supplierName);
+    
+    List<Suppliers> findBySubCategory(SubCategory subCategory);
 }
 
