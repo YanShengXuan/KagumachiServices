@@ -263,15 +263,16 @@ public class BackHomeController {
 	 		
 	 //圖表
 	 @GetMapping("/getpic")
-	 public Map<String, Object> getAllPic() {
+	 public String  getAllPic() {
 	        List<OrderDetail> orderdetails = orderDetailRepository.findAll();
-
+	        JSONObject jsonObject = new JSONObject();
+	        
 	        int total = 0;
 	        int cost = 0;
 	        
-	        Map<Integer, Integer> categoryCount = new HashMap<>();
+	        Map<Integer, Integer> categoryAmounts = new HashMap<>();
 	        for (int i = 1; i <= 6; i++) {
-	            categoryCount.put(i, 0);
+	            categoryAmounts.put(i, 0); // 初始化每個大類別的金額為 0
 	        }
 
 	        for (OrderDetail orderdetail : orderdetails) {
@@ -285,20 +286,19 @@ public class BackHomeController {
 	            cost += productCost * quantity;
 
 	            
-	            if (categoryCount.containsKey(categoryId)) {
-	                categoryCount.put(categoryId, categoryCount.get(categoryId) + 1);
+	            if (categoryAmounts.containsKey(categoryId)) {
+	                categoryAmounts.put(categoryId, categoryAmounts.get(categoryId) + (discountPrice * quantity));
 	            }
 	        }
 
 	        int fin = total - cost;
         
-	        Map<String, Object> response = new HashMap<>();
-	        response.put("total", total);
-	        response.put("cost", cost);
-	        response.put("fin", fin);
-	        response.put("categoryCount", categoryCount);
+	        jsonObject.put("total", total);
+	        jsonObject.put("cost", cost);
+	        jsonObject.put("fin", fin);
+	        jsonObject.put("categoryAmounts", categoryAmounts); // 將各大類金額回傳
 
-	        return response;
+	        return jsonObject.toString();
 	 }
 }
 
