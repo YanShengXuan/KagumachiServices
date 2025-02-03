@@ -135,7 +135,6 @@ public class LoginController {
         return ResponseEntity.ok(new AuthResponse(token, member.getMemberid()));
     }
 
-    private final String FACEBOOK_GRAPH_URL = "https://graph.facebook.com/me?fields=id,email&access_token=";
 
 
 }
