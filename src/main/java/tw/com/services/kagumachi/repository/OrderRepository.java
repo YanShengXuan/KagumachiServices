@@ -1,6 +1,5 @@
 package tw.com.services.kagumachi.repository;
 
-import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import tw.com.services.kagumachi.model.Member;
+import jakarta.transaction.Transactional;
 import tw.com.services.kagumachi.model.Order;
 
 @Repository
@@ -44,4 +43,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Transactional
     @Query("DELETE FROM Order o WHERE o.member.memberid = :memberId")
     void deleteByMemberId(@Param("memberId") Integer memberId);
+    
+    // by ChongWei
+    @Query("SELECT COALESCE(SUM(o.totalprice), 0) FROM Order o WHERE o.orderdate BETWEEN :startDate AND :endDate")
+    Double findTotalRevenueByDateRange(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }
