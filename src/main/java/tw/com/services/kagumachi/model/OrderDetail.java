@@ -30,7 +30,7 @@ public class OrderDetail {
 
     private Integer quantity;
     
-    private Double price;
+    private Integer price;
 
     public Integer getOrderdetailid() {
         return orderdetailid;
@@ -72,6 +72,14 @@ public class OrderDetail {
 		this.productColor = productColor;
 	}
 	
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+
 	@Override
 	public String toString() {
 	    return "OrderDetail{" +
@@ -81,14 +89,6 @@ public class OrderDetail {
 	           ", colorsId=" + productColor.getColorsid() +
 	           ", quantity=" + quantity +
 	           "}";
-	}
-
-	public Double getPrice() {
-		return price;
-	}
-
-	public void setPrice(Double price) {
-		this.price = price;
 	}
     
 }
