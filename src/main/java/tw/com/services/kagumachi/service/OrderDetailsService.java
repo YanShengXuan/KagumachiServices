@@ -113,14 +113,12 @@ public class OrderDetailsService {
 		List<OrderDetailsDto> result = new ArrayList<OrderDetailsDto>();
 		for (OrderDetail orderdetail : orderdetails) {
 			OrderDetailsDto dto = new OrderDetailsDto();
-			int unitprice = orderdetail.getProduct().getUnitprice();
-			int discountprice = orderdetail.getProduct().getDiscountprice() != null ? orderdetail.getProduct().getDiscountprice() : 0;
 			Integer productId = orderdetail.getProduct().getProductid();
 			Integer colorsId = orderdetail.getProductColor().getColorsid();
 			dto.setOrderdetailid(orderdetail.getOrderdetailid());
 			dto.setProductname(orderdetail.getProduct().getProductname());
 			dto.setColorname(orderdetail.getProductColor().getColorname());
-			dto.setPrice(discountprice > 0 ? discountprice : unitprice);
+			dto.setPrice(orderdetail.getPrice());
 			dto.setQuantity(orderdetail.getQuantity());
 			dto.setProductid(productId);
 			dto.setColorsid(colorsId);
