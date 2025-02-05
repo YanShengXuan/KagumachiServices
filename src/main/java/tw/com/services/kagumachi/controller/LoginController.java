@@ -89,7 +89,7 @@ public class LoginController {
         try {
             String token = loginService.saveResetToken(email);
 
-            String resetLink = "http://localhost:5173/reset-password/" + token;
+            String resetLink = "http://localhost:5173/Kagumachi/reset-password/" + token;
             emailService.sendEmail(email, "密碼重設", "請點擊以下連結來重設密碼: " + resetLink);
 
             return ResponseEntity.ok(Map.of("message", "重設密碼連結已發送至您的信箱！"));
