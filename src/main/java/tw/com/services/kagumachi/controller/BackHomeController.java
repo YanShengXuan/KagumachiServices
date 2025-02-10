@@ -229,10 +229,16 @@ public class BackHomeController {
 	 		for(ProductColor productColor: productColors) {
 	 			if((productColor.getStock())-(productColor.getMinstock())<(productColor.getMinstock())) {
 	 				JSONObject jsonObject = new JSONObject();
+	 				double m = productColor.getStock()-productColor.getMinstock();
+	 				if(m==0) {
+	 					continue;
+	 				}else {
+	 					m = m * (-1);
+	 				}		
 					jsonObject.put("productid",productColor.getProduct().getProductid());
 					jsonObject.put("colorsid",productColor.getColorsid());
 					jsonObject.put("stock",productColor.getStock());
-					jsonObject.put("minstock",productColor.getStock()-productColor.getMinstock());
+					jsonObject.put("minstock",m);
 					for(Product product:products) {
 						for(Suppliers supplier:suppliers) {
 							jsonObject.put("name",productColor.getProduct().getSupplier().getName());
