@@ -59,8 +59,8 @@ public class OrderController {
 		return orderRepository.findByDateBetweenTotalprice(orderDto.getStartDate(), orderDto.getEndDate());
 	}
 	
-	@PostMapping("/orderstatusASC")
-	public List<Order> OrderstatusASC(@RequestBody OrderDto orderDto){
+	@PostMapping("/orderstatusDESC")
+	public List<Order> OrderstatusDESC(@RequestBody OrderDto orderDto){
 		return orderRepository.findByDateBetweenOrderstatus(orderDto.getStartDate(), orderDto.getEndDate());
 	}
 	

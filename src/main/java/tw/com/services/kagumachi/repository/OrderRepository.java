@@ -21,11 +21,11 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByDateBetween(@Param("startDate") LocalDate startDate,
 			@Param("endDate") LocalDate endDate);
 
-    @Query("SELECT o FROM Order o ORDER BY o.totalprice ASC")
+    @Query("SELECT o FROM Order o WHERE o.orderdate BETWEEN :startDate AND :endDate ORDER BY o.totalprice ASC")
     List<Order> findByDateBetweenTotalprice(@Param("startDate") LocalDate startDate,
 			@Param("endDate") LocalDate endDate);
     
-    @Query("SELECT o FROM Order o ORDER BY o.orderstatus ASC")
+    @Query("SELECT o FROM Order o WHERE o.orderdate BETWEEN :startDate AND :endDate ORDER BY o.orderstatus DESC")
     List<Order> findByDateBetweenOrderstatus(@Param("startDate") LocalDate startDate,
 			@Param("endDate") LocalDate endDate);
     
